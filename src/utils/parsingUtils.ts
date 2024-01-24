@@ -1,4 +1,4 @@
-import { NewProject, NewUser, ProjectType, Skills } from '../types'
+import { AboutMeInfoType, AboutMeType, NewAboutMeType, NewProject, NewUser, ProjectType, Skills } from '../types'
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String
@@ -123,4 +123,57 @@ const parseOldProjectData = (startingObject: unknown): ProjectType => {
   throw new Error('Incorrect data: some fields are missing')
 }
 
-export default { parseUserData, parseNewProjectData, parseOldProjectData }
+const isInfoType = (object: string): object is AboutMeInfoType => {
+  return Object.values(AboutMeInfoType).map(val => val.toString()).includes(object)
+}
+
+const parseAboutMeType = (object: unknown): AboutMeInfoType => {
+  if (!isString(object) || !isInfoType(object)) {
+    throw new Error('Incorrect type.' + object)
+  }
+  return object
+}
+
+const parseNewAboutMeData = (startingObject: unknown): NewAboutMeType => {
+  const object = parseObject(startingObject)
+
+  if (
+    'picture' in object &&
+    'name' in object &&
+    'description' in object &&
+    'picDesc' in object &&
+    'type' in object
+  ) {
+    const newAboutmePost: NewAboutMeType = {
+      picture: parseString(object.picture, 'picture'),
+      name: parseString(object.name, 'name'),
+      description: parseString(object.description, 'description'),
+      picDesc: parseString(object.picDesc, 'picDesc'),
+      type: parseAboutMeType(object.type),
+    }
+    return newAboutmePost
+  }
+  throw new Error('Incorrect data: some fields are missing')
+}
+
+const parseOldAboutMeData = (startingObject: unknown): AboutMeType => {
+  const object = parseObject(startingObject)
+  if ('id' in object && 'dateAdded' in object) {
+    const parsedObject: AboutMeType = {
+      ...parseNewAboutMeData(object),
+      id: parseString(object.id, 'id'),
+      dateAdded: parseDate(object.dateAdded),
+    }
+    return parsedObject
+  }
+  throw new Error('Incorrect data: some fields are missing')
+}
+
+
+export default {
+  parseUserData,
+  parseNewProjectData,
+  parseOldProjectData,
+  parseOldAboutMeData,
+  parseNewAboutMeData,
+}

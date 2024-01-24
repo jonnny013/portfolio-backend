@@ -58,8 +58,9 @@ export interface AboutMeType {
   id: string
   picDesc: string
   type: AboutMeInfoType
+  dateAdded: string
 }
 
-export type NewAboutMeType = Omit<ProjectType, 'id' | 'dateAdded'>
+export type NewAboutMeType = Omit<AboutMeType, 'id' | 'dateAdded'>
 
 export type AboutMeWithoutID = Omit<AboutMeType, 'id'>
