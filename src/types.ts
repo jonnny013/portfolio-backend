@@ -45,13 +45,19 @@ export type NewUser = Omit<UserType, 'id' | 'dateAdded'>
 
 export type UserWithoutId = Omit<UserType, 'id'>
 
+export enum AboutMeInfoType {
+  Certificate = 'Certificate',
+  Personal = 'Personal',
+  Experience = 'Experience',
+}
+
 export interface AboutMeType {
   picture: HTMLImageElement | File | string
   name: string
   description: string
   id: string
   picDesc: string
-  dateAdded: string
+  type: AboutMeInfoType
 }
 
 export type NewAboutMeType = Omit<ProjectType, 'id' | 'dateAdded'>
