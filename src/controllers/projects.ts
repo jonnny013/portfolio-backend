@@ -6,7 +6,7 @@ const projectRouter = express.Router()
 
 projectRouter.post('/', (async (request, response) => {
   try {
-    const newPost = utilCheck.parseProjectData(request.body)
+    const newPost = utilCheck.parseNewProjectData(request.body)
     const addedPost = await projectService.addProject(newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
