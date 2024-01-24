@@ -6,6 +6,7 @@ import userRouter from './controllers/users'
 import mongoose from 'mongoose'
 import middleware from './utils/middleware'
 import projectRouter from './controllers/projects'
+import aboutMeRouter from './controllers/aboutMePosts'
 
 mongoose.set('strictQuery', false)
 
@@ -36,6 +37,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/user', userRouter)
 app.use('/api/projects', projectRouter)
+app.use('/api/aboutMe', aboutMeRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
