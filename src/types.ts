@@ -1,4 +1,4 @@
-export interface Project {
+export interface ProjectType {
   id: string
   title: string
   project: string
@@ -20,9 +20,9 @@ export interface Project {
   dateAdded: string
 }
 
-export type ProjectWithoutID = Omit<Project, 'id'>
+export type ProjectWithoutID = Omit<ProjectType, 'id'>
 
-export interface ContactFormTypes {
+export interface ContactFormType {
   name: string
   email: string
   subject: string
@@ -30,12 +30,15 @@ export interface ContactFormTypes {
   dateAdded: string
 }
 
-export interface User {
+export interface UserType {
   username: string
   password: string
+  dateAdded: string
 }
 
-export interface AboutMe {
+export type UserWithoutId = Omit<UserType, 'id'>
+
+export interface AboutMeType {
   picture: HTMLImageElement | File | string
   name: string
   description: string
@@ -44,4 +47,4 @@ export interface AboutMe {
   dateAdded: string
 }
 
-export type AboutMeWithoutID = Omit<AboutMe, 'id'>
+export type AboutMeWithoutID = Omit<AboutMeType, 'id'>
