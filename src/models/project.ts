@@ -1,17 +1,20 @@
 import mongoose from 'mongoose'
 
-const SkillsSchema = new mongoose.Schema({
-  css: Boolean,
-  html: Boolean,
-  node: Boolean,
-  react: Boolean,
-  bootstrap: Boolean,
-  materialUI: Boolean,
-  mongoDB: Boolean,
-  express: Boolean,
-  javascript: Boolean,
-  typescript: Boolean,
-})
+const SkillsSchema = new mongoose.Schema(
+  {
+    css: Boolean,
+    html: Boolean,
+    node: Boolean,
+    react: Boolean,
+    bootstrap: Boolean,
+    materialUI: Boolean,
+    mongoDB: Boolean,
+    express: Boolean,
+    javascript: Boolean,
+    typescript: Boolean,
+  },
+  { _id: false, versionKey: false }
+)
 
 const projectSchema = new mongoose.Schema({
   title: {
@@ -55,6 +58,7 @@ projectSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
+    // delete returnedObject.skills._id
   },
 })
 

@@ -41,7 +41,8 @@ const isBoolean = (boolean: unknown): boolean is boolean => {
 }
 
 const parseBoolean = (item: unknown, name: string): boolean => {
-  if (!item || !isBoolean(item)) {
+  console.log('item:',item, '. name:', name)
+  if ( !isBoolean(item)) {
     throw new Error(`Incorrect or missing ${name}`)
   }
   return item

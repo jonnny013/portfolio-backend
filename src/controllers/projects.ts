@@ -12,7 +12,7 @@ projectRouter.post('/', (async (request, response) => {
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
-      response.status(400).send('Username is already taken')
+      response.status(400).send('Title is already taken')
       return
     }
 

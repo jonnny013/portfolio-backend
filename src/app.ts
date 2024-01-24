@@ -5,6 +5,7 @@ import config from './utils/config'
 import userRouter from './controllers/users'
 import mongoose from 'mongoose'
 import middleware from './utils/middleware'
+import projectRouter from './controllers/projects'
 
 mongoose.set('strictQuery', false)
 
@@ -34,6 +35,7 @@ app.use(express.static('dist'))
 app.use(middleware.requestLogger)
 
 app.use('/api/user', userRouter)
+app.use('/api/projects', projectRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
