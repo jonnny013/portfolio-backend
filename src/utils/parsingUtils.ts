@@ -1,4 +1,4 @@
-import { NewUser } from "../types"
+import { NewProject, NewUser, Skills } from "../types"
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String
@@ -36,18 +36,80 @@ const parseUserData = (object: unknown): NewUser => {
   throw new Error('Incorrect data: some fields are missing')
 }
 
+const isBoolean = (boolean: unknown): boolean is boolean => {
+  return typeof boolean === 'boolean' || boolean instanceof Boolean
+}
+
+const parseBoolean = (item: unknown, name: string): boolean => {
+  if (!item || !isBoolean(item)) {
+    throw new Error(`Incorrect or missing ${name}`)
+  }
+  return item
+}
+
+
+const parseSkills = (object: unknown): Skills => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data')
+  }
+  if (
+    'css' in object &&
+    'html' in object &&
+    'node' in object &&
+    'react' in object &&
+    'bootstrap' in object &&
+    'materialUI' in object &&
+    'mongoDB' in object &&
+    'express' in object &&
+    'javascript' in object &&
+    'typescript' in object
+  ) {
+    const skills = {
+    css: parseBoolean(object.css, 'css'),
+    html: parseBoolean(object.html, 'html'),
+    node: parseBoolean(object.node, 'node'),
+    react: parseBoolean(object.react, 'react'),
+    bootstrap: parseBoolean(object.bootstrap, 'bootstrap'),
+    materialUI: parseBoolean(object.materialUI, 'materialUI'),
+    mongoDB: parseBoolean(object.mongoDB, 'mongoDB'),
+    express: parseBoolean(object.express, 'express'),
+    javascript: parseBoolean(object.javascript, 'javascript'),
+    typescript: parseBoolean(object.typescript, 'typescript'),
+    }
+    return skills
+  }
+throw new Error('Incorrect skills: some fields are missing')
+}
+
 const parseProjectData = (object: unknown): NewProject => {
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data')
   }
-  if ('username' in object && 'password' in object) {
-    const newUser: NewUser = {
-      username: parseString(object.username, 'username'),
-      password: parseString(object.password, 'password'),
+
+  if (
+    'title' in object &&
+    'project' in object &&
+    'description' in object &&
+    'website' in object &&
+    'sourceCode' in object &&
+    'skills' in object
+  ) {
+    const newProject: NewProject = {
+      title: parseString(object.title, 'title'),
+      project: parseString(object.project, 'project'),
+      description: parseString(object.description, 'description'),
+      website: parseString(object.website, 'website'),
+      sourceCode: parseString(object.sourceCode, 'sourceCode'),
+      skills: parseSkills(object.skills)
     }
-    return newUser
+    return newProject
   }
   throw new Error('Incorrect data: some fields are missing')
 }
 
 export default {parseUserData, parseProjectData}
+
+// && 'username' in object && 'password' in object
+
+// username: parseString(object.username, 'username'),
+// password: parseString(object.password, 'password'),

@@ -3,7 +3,13 @@ export interface ProjectType {
   title: string
   project: string
   description: string
-  skills: {
+  skills: Skills
+  website: string
+  sourceCode: string
+  dateAdded: string
+}
+
+export interface Skills {
     css: boolean
     html: boolean
     node: boolean
@@ -14,10 +20,6 @@ export interface ProjectType {
     express: boolean
     javascript: boolean
     typescript: boolean
-  }
-  website: string
-  sourceCode: string
-  dateAdded: string
 }
 
 export type ProjectWithoutID = Omit<ProjectType, 'id'>

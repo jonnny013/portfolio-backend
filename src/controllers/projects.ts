@@ -1,12 +1,13 @@
 import express, { RequestHandler } from 'express'
-import userService from '../services/userService'
+
 import utilCheck from '../utils/parsingUtils'
+import projectService from '../services/projectService'
 const projectRouter = express.Router()
 
 projectRouter.post('/', (async (request, response) => {
   try {
     const newPost = utilCheck.parseProjectData(request.body)
-    const addedPost = await userService.addUser(newPost)
+    const addedPost = await projectService.addProject(newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
@@ -23,7 +24,7 @@ projectRouter.post('/', (async (request, response) => {
 }) as RequestHandler)
 
 projectRouter.get('/', (async (_request, response) => {
-  const user = await userService.getUser()
+  const user = await projectService.getProject()
   if (user) {
     response.json(user)
   } else {
