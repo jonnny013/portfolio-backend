@@ -34,7 +34,10 @@ export interface UserType {
   username: string
   password: string
   dateAdded: string
+  id: string
 }
+
+export type NewUser = Omit<UserType, 'id' | 'dateAdded'>
 
 export type UserWithoutId = Omit<UserType, 'id'>
 
