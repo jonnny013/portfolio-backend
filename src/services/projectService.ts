@@ -1,5 +1,5 @@
 import Project from '../models/project'
-import { NewProject } from '../types'
+import { NewProject, ProjectType } from '../types'
 
 const getProject = async () => {
   const project = await Project.find({})
@@ -27,7 +27,7 @@ const addProject = async (object: NewProject) => {
   return savedProject
 }
 
-const editProject = async (object: NewProject, id: string) => {
+const editProject = async (object: ProjectType, id: string) => {
   const updatedProject = await Project.findByIdAndUpdate(id, object, {new: true})
 
   return updatedProject

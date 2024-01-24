@@ -23,6 +23,10 @@ const aboutMeSchema = new mongoose.Schema({
   dateAdded: {
     type: Date,
   },
+  type: {
+    type: String,
+    required: true
+  }
 })
 
 aboutMeSchema.set('toJSON', {
