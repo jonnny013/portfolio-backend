@@ -41,4 +41,35 @@ projectRouter.get('/:id', (async (request, response) => {
   }
 }) as RequestHandler)
 
+projectRouter.delete('/:id', (async (request, response, next) => {
+  try {
+    await projectService.deleteProject(request.params.id)
+    response.status(200).json({ message: 'Successful deletion' })
+  } catch (error) { next(error)}
+  
+}) as RequestHandler)
+
+projectRouter.put('/:id', (async (request, response) => {
+  const id = request.params.id
+  const post: unknown = request.body
+  try {
+    const newPost = utilCheck.parseOldProjectData(post)
+    const addedPost = await projectService.editProject(newPost, id)
+    response.status(201).json(addedPost)
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.'
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+      response.status(400).send('Title is already taken')
+      return
+    }
+
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message
+    }
+    response.status(400).send(errorMessage)
+  }
+}) as RequestHandler)
+
+
+
 export default projectRouter
