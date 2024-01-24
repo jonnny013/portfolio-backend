@@ -24,9 +24,18 @@ projectRouter.post('/', (async (request, response) => {
 }) as RequestHandler)
 
 projectRouter.get('/', (async (_request, response) => {
-  const user = await projectService.getProject()
-  if (user) {
-    response.json(user)
+  const project = await projectService.getProject()
+  if (project) {
+    response.json(project)
+  } else {
+    response.sendStatus(404)
+  }
+}) as RequestHandler)
+
+projectRouter.get('/:id', (async (request, response) => {
+  const project = await projectService.getSingleProject(request.params.id)
+  if (project) {
+    response.json(project)
   } else {
     response.sendStatus(404)
   }

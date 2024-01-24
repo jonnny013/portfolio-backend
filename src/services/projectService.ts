@@ -6,6 +6,11 @@ const getProject = async () => {
   return project
 }
 
+const getSingleProject = async (id: string) => {
+  const project = await Project.findById(id)
+  return project
+}
+
 const addProject = async (object: NewProject) => {
   const dateAdded = new Date().toString()
 
@@ -17,4 +22,4 @@ const addProject = async (object: NewProject) => {
   return savedProject
 }
 
-export default { getProject, addProject }
+export default { getProject, addProject, getSingleProject }
