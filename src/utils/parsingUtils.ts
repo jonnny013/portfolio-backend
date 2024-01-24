@@ -34,7 +34,20 @@ const parseUserData = (object: unknown): NewUser => {
     return newUser
   }
   throw new Error('Incorrect data: some fields are missing')
-  
 }
 
-export default {parseUserData}
+const parseProjectData = (object: unknown): NewProject => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data')
+  }
+  if ('username' in object && 'password' in object) {
+    const newUser: NewUser = {
+      username: parseString(object.username, 'username'),
+      password: parseString(object.password, 'password'),
+    }
+    return newUser
+  }
+  throw new Error('Incorrect data: some fields are missing')
+}
+
+export default {parseUserData, parseProjectData}

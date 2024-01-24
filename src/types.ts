@@ -2,7 +2,7 @@ export interface ProjectType {
   id: string
   title: string
   project: string
-  intro: string
+  description: string
   skills: {
     css: boolean
     html: boolean
@@ -21,6 +21,8 @@ export interface ProjectType {
 }
 
 export type ProjectWithoutID = Omit<ProjectType, 'id'>
+
+export type NewProject = Omit<ProjectType, 'id' | 'dateAdded'>
 
 export interface ContactFormType {
   name: string
@@ -49,5 +51,7 @@ export interface AboutMeType {
   picDesc: string
   dateAdded: string
 }
+
+export type NewAboutMeType = Omit<ProjectType, 'id' | 'dateAdded'>
 
 export type AboutMeWithoutID = Omit<AboutMeType, 'id'>
