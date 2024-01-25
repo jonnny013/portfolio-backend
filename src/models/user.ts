@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 const loginRecordSchema = new mongoose.Schema(
   {
     time: {type: Date},
-    ipAddress: String
+    ipAddress: String,
+    device: String
   },
   { _id: false, versionKey: false }
 )

@@ -7,6 +7,7 @@ export interface ProjectType {
   website: string
   sourceCode: string
   dateAdded: string
+  recommended: boolean
 }
 
 export interface Skills {
@@ -35,8 +36,9 @@ export interface ContactFormType {
 }
 
 export interface LoginRecord {
-  time: string
-  ipAddress: string
+  time: string[]
+  ipAddress: string[]
+  device: string[]
 }
 
 export interface AccountStatus {
@@ -54,8 +56,6 @@ export interface UserType {
 }
 
 export type NewUser = Omit<UserType, 'id' | 'dateAdded' | 'loginRecord' | 'accountStatus'>
-
-export type SafeUserInfo = Omit<UserType, 'dateAdded' | 'loginRecord' | 'accountStatus'>
 
 export enum AboutMeInfoType {
   Certificate = 'Certificate',

@@ -1,9 +1,14 @@
 import User from '../models/user'
 import bcrypt from 'bcrypt'
+import { UserType } from '../types'
 
-const getUser = async () => {
+const getUser = async (): Promise<Pick<UserType, "id" | "username">[]> => {
   const user = await User.find({})
-  return user
+  return user.map(({id, username}) => ({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    id ,
+    username
+  }))
 }
 
 const addUser = async ({password, username}: {password: string, username: string}) => {
@@ -13,11 +18,22 @@ const addUser = async ({password, username}: {password: string, username: string
   const dateAdded = new Date().toString()
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
+  const accountStatus = {
+    active: true,
+    locked: false
+  }
+  const loginRecord = {
+    time: [],
+    ipAddress: [],
+    device: []
+  }
 
   const user = new User({
     username,
     passwordHash,
-    dateAdded
+    dateAdded,
+    accountStatus,
+    loginRecord
   })
     const savedUser = await user.save()
   return savedUser
