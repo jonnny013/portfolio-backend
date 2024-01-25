@@ -28,7 +28,11 @@ const addProject = async (object: NewProject) => {
 }
 
 const editProject = async (object: ProjectType, id: string) => {
-  const updatedProject = await Project.findByIdAndUpdate(id, object, {new: true})
+  const updatedProject = await Project.findByIdAndUpdate(id, object, {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  })
 
   return updatedProject
 }

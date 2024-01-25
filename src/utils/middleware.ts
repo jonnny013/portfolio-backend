@@ -11,6 +11,7 @@ const requestLogger = (request: Request, response: Response, next: NextFunction)
     logger.info('---')
   })
   logger.info('---')
+  logger.info('User IP: ', request.ip, request.connection.remoteAddress, 'user agent: ', request.get('User-Agent'))
   next()
 }
 

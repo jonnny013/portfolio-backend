@@ -28,7 +28,11 @@ const addAboutMePost = async (object: NewAboutMeType) => {
 }
 
 const editAboutMePost = async (object: AboutMeType, id: string) => {
-  const updatedAboutMePost = await AboutMePost.findByIdAndUpdate(id, object, { new: true })
+  const updatedAboutMePost = await AboutMePost.findByIdAndUpdate(id, object, {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  })
 
   return updatedAboutMePost
 }

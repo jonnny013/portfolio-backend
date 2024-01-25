@@ -34,16 +34,28 @@ export interface ContactFormType {
   dateAdded: string
 }
 
+export interface LoginRecord {
+  time: string
+  ipAddress: string
+}
+
+export interface AccountStatus {
+  active: boolean
+  locked: boolean
+}
+
 export interface UserType {
   username: string
   password: string
   dateAdded: string
+  loginRecord: LoginRecord[]
+  accountStatus: AccountStatus
   id: string
 }
 
-export type NewUser = Omit<UserType, 'id' | 'dateAdded'>
+export type NewUser = Omit<UserType, 'id' | 'dateAdded' | 'loginRecord' | 'accountStatus'>
 
-export type UserWithoutId = Omit<UserType, 'id'>
+export type SafeUserInfo = Omit<UserType, 'dateAdded' | 'loginRecord' | 'accountStatus'>
 
 export enum AboutMeInfoType {
   Certificate = 'Certificate',

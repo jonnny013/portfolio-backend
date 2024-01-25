@@ -1,5 +1,21 @@
 import mongoose from 'mongoose'
 
+const loginRecordSchema = new mongoose.Schema(
+  {
+    time: {type: Date},
+    ipAddress: String
+  },
+  { _id: false, versionKey: false }
+)
+
+const accountStatusSchema = new mongoose.Schema(
+  {
+    active: Boolean,
+    locked: Boolean,
+  },
+  { _id: false, versionKey: false }
+)
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -11,6 +27,12 @@ const userSchema = new mongoose.Schema({
   dateAdded: {
     type: Date,
   },
+  loginRecord: {
+    type: loginRecordSchema
+  },
+  accountStatus: {
+    type: accountStatusSchema
+  }
 }) 
 
 userSchema.set('toJSON', {
