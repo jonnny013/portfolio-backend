@@ -57,7 +57,7 @@ export interface UserType {
   id: string
 }
 
-export type NewUser = Omit<UserType, 'id' | 'dateAdded' | 'loginRecord' | 'accountStatus'>
+export type NewUser = Omit<UserType, 'id' | 'dateAdded' | 'loginRecord' | 'accountStatus' >
 
 export enum AboutMeInfoType {
   Certificate = 'Certificate',

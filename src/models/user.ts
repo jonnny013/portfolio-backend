@@ -1,5 +1,25 @@
 import mongoose from 'mongoose'
 
+interface LoginRecord {
+  ipAddress?: string
+  device?: string
+  time?: Date
+}
+
+interface AccountStatus {
+  active: boolean
+  locked: boolean
+  failedLoginAttempts: number
+}
+
+export interface UserDocument extends mongoose.Document {
+  username: string
+  passwordHash: string
+  dateAdded: Date
+  loginRecord: LoginRecord[]
+  accountStatus: AccountStatus
+}
+
 const loginRecordSchema = new mongoose.Schema(
   {
     time: {type: Date},
@@ -47,6 +67,6 @@ userSchema.set('toJSON', {
   },
 })
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model<UserDocument>('User', userSchema)
 
 export default User
