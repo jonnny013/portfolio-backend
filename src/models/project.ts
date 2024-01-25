@@ -50,6 +50,10 @@ const projectSchema = new mongoose.Schema({
   dateAdded: {
     type: Date,
   },
+  recommended: {
+    type: Boolean,
+    required: true
+  }
 })
 
 projectSchema.set('toJSON', {

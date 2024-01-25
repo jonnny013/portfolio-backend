@@ -95,7 +95,8 @@ const parseNewProjectData = (startingObject: unknown): NewProject => {
     'description' in object &&
     'website' in object &&
     'sourceCode' in object &&
-    'skills' in object
+    'skills' in object &&
+    'recommended' in object
   ) {
     const newProject: NewProject = {
       title: parseString(object.title, 'title'),
@@ -104,6 +105,7 @@ const parseNewProjectData = (startingObject: unknown): NewProject => {
       website: parseString(object.website, 'website'),
       sourceCode: parseString(object.sourceCode, 'sourceCode'),
       skills: parseSkills(object.skills),
+      recommended: parseBoolean(object.recommended, 'recommended')
     }
     return newProject
   }
