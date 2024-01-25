@@ -88,7 +88,6 @@ const parseSkills = (startingObject: unknown): Skills => {
 
 const parseNewProjectData = (startingObject: unknown): NewProject => {
   const object = parseObject(startingObject)
-
   if (
     'title' in object &&
     'project' in object &&

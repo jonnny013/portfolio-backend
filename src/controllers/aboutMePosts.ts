@@ -1,8 +1,9 @@
 import express, { RequestHandler } from 'express'
-// import utilCheck from '../utils/parsingUtils'
+ import utilCheck from '../utils/parsingUtils'
 import aboutMeService from '../services/aboutMeService'
 import multer from 'multer'
 import path from 'path'
+import { NewAboutMeType } from '../types'
 
 const aboutMeRouter = express.Router()
 
@@ -20,9 +21,10 @@ const upload = multer({
   storage: storage
 })
 
-aboutMeRouter.post('/', upload.single('picture'), ((request, response) => {
+aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => {
   console.log('---file', request.file, '---body', request.body)
-  const {name, description, picDesc, type}: unknown = request.body
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const {name, description, picDesc, type}: {name: unknown, description: unknown, picDesc: unknown, type: unknown }= request.body
   const data: unknown = {
     name,
     description,
@@ -31,7 +33,7 @@ aboutMeRouter.post('/', upload.single('picture'), ((request, response) => {
     picture: request.file?.filename
   }
   try {
-    const newPost = await utilCheck.parseNewAboutMeData(data)
+    const newPost: NewAboutMeType = utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost( newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {

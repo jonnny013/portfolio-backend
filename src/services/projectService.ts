@@ -17,14 +17,24 @@ const deleteProject = async (id: string) => {
 }
 
 const addProject = async (object: NewProject) => {
-  const dateAdded = new Date().toString()
-
-  const project = new Project({
-    ...object,
-    dateAdded,
-  })
-  const savedProject = await project.save()
-  return savedProject
+  try {
+    const dateAdded = new Date().toString()
+    const project = new Project({
+      ...object,
+      dateAdded,
+    })
+    const savedProject = await project.save()
+    console.log('end', savedProject)
+    return savedProject
+  } catch (error) {
+    console.log(error)
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+      throw new Error('Title is already taken')
+    }
+     else {
+      throw new Error('Database error')
+    }
+  }
 }
 
 const editProject = async (object: ProjectType, id: string) => {

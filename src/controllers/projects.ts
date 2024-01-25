@@ -7,7 +7,9 @@ const projectRouter = express.Router()
 projectRouter.post('/', (async (request, response) => {
   try {
     const newPost = utilCheck.parseNewProjectData(request.body)
+    console.log('here1')
     const addedPost = await projectService.addProject(newPost)
+     console.log('here2')
     response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
@@ -17,7 +19,7 @@ projectRouter.post('/', (async (request, response) => {
     }
 
     if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message
+      errorMessage += ' Error: ' + error.message + error
     }
     response.status(400).send(errorMessage)
   }
