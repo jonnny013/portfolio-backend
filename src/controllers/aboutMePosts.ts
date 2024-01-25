@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   },
   filename: function (_req, file, cb) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname))
+    cb(null,  Date.now() + path.extname(file.originalname))
   }
 })
 
@@ -22,9 +22,16 @@ const upload = multer({
 
 aboutMeRouter.post('/', upload.single('picture'), ((request, response) => {
   console.log('---file', request.file, '---body', request.body)
-  response.status(200).json({ message: 'Successful deletion' })
-  /*try {
-    const newPost = await utilCheck.parseNewAboutMeData(request.body)
+  const {name, description, picDesc, type}: unknown = request.body
+  const data: unknown = {
+    name,
+    description,
+    picDesc,
+    type,
+    picture: request.file?.filename
+  }
+  try {
+    const newPost = await utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost( newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
@@ -38,7 +45,7 @@ aboutMeRouter.post('/', upload.single('picture'), ((request, response) => {
       errorMessage += ' Error: ' + error.message
     }
     response.status(400).send(errorMessage)
-  } */
+  } 
 }) as RequestHandler)
 
 aboutMeRouter.get('/', (async (_request, response) => {

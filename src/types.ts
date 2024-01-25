@@ -64,7 +64,7 @@ export enum AboutMeInfoType {
 }
 
 export interface AboutMeType {
-  picture:  File | string | Buffer
+  picture:  string 
   name: string
   description: string
   id: string

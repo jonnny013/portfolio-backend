@@ -136,19 +136,6 @@ const parseAboutMeType = (object: unknown): AboutMeInfoType => {
   return object
 }
 
-/* const parsePicture =  (object: unknown): string | File | Buffer => {
-  if (isString(object)) {
-    return object
-  } else {
-    if (typeof object === 'object' && object &&'data' in object) {
-      const type = object.data
-      if (type && 'ext' in type && (type.ext === 'jpg' || type.ext === 'png' || type.ext === 'gif')) {
-        return object.data as Buffer
-    }
-    
-  }
-  throw new Error('Incorrect picture type')
-}} */
 
 const parseNewAboutMeData =  (startingObject: unknown): NewAboutMeType => {
   const object = parseObject(startingObject)
@@ -161,7 +148,7 @@ const parseNewAboutMeData =  (startingObject: unknown): NewAboutMeType => {
     'type' in object
   ) {
     const newAboutmePost: NewAboutMeType = {
-      picture:  parseString(object.picture, 'pic'),
+      picture:  parseString(object.picture, 'picture'),
       name: parseString(object.name, 'name'),
       description: parseString(object.description, 'description'),
       picDesc: parseString(object.picDesc, 'picDesc'),
