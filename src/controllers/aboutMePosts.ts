@@ -1,12 +1,31 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from '../utils/parsingUtils'
+// import utilCheck from '../utils/parsingUtils'
 import aboutMeService from '../services/aboutMeService'
+import multer from 'multer'
+import path from 'path'
+
 const aboutMeRouter = express.Router()
 
-aboutMeRouter.post('/', (async (request, response) => {
-  try {
-    const newPost = utilCheck.parseNewAboutMeData(request.body)
-    const addedPost = await aboutMeService.addAboutMePost(newPost)
+const storage = multer.diskStorage({
+  destination: function (_req, _res, cb) {
+    cb(null, './public/images')
+  },
+  filename: function (_req, file, cb) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({
+  storage: storage
+})
+
+aboutMeRouter.post('/', upload.single('picture'), ((request, response) => {
+  console.log('---file', request.file, '---body', request.body)
+  response.status(200).json({ message: 'Successful deletion' })
+  /*try {
+    const newPost = await utilCheck.parseNewAboutMeData(request.body)
+    const addedPost = await aboutMeService.addAboutMePost( newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
@@ -19,7 +38,7 @@ aboutMeRouter.post('/', (async (request, response) => {
       errorMessage += ' Error: ' + error.message
     }
     response.status(400).send(errorMessage)
-  }
+  } */
 }) as RequestHandler)
 
 aboutMeRouter.get('/', (async (_request, response) => {
@@ -49,11 +68,11 @@ aboutMeRouter.delete('/:id', (async (request, response, next) => {
   }
 }) as RequestHandler)
 
-aboutMeRouter.put('/:id', (async (request, response) => {
+/* aboutMeRouter.put('/:id', (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
   try {
-    const newPost = utilCheck.parseOldAboutMeData(post)
+    const newPost = await utilCheck.parseOldAboutMeData(post)
     const addedPost = await aboutMeService.editAboutMePost(newPost, id)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
@@ -68,6 +87,6 @@ aboutMeRouter.put('/:id', (async (request, response) => {
     }
     response.status(400).send(errorMessage)
   }
-}) as RequestHandler)
+}) as RequestHandler) */
 
 export default aboutMeRouter

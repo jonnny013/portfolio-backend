@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const aboutMeSchema = new mongoose.Schema({
   picture: {
-    type: String,
+    type: Buffer,
     required: true,
   },
   name: {
