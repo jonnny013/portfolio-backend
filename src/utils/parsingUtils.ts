@@ -178,4 +178,5 @@ export default {
   parseOldProjectData,
   parseOldAboutMeData,
   parseNewAboutMeData,
+  isString
 }
