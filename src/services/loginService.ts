@@ -2,23 +2,29 @@
 import { Request } from 'express'
 import User, { UserDocument } from '../models/user'
 
-
 const onLoginSuccess = async (user: UserDocument, request: Request) => {
-  const id = user._id 
+  const id = user._id
   const time = new Date().toString()
   const ipAddress = request.ip as string
   const device = request.get('User-Agent') as string
   const newRecord = {
     time,
     ipAddress,
-    device
+    device,
   }
 
-   await User.findByIdAndUpdate(id, { $push: {loginRecord: newRecord},    $set: { 'accountStatus.failedLoginAttempts': 0 },}, {new: true})
+  await User.findByIdAndUpdate(
+    id,
+    {
+      $push: { loginRecord: newRecord },
+      $set: { 'accountStatus.failedLoginAttempts': 0 },
+    },
+    { new: true }
+  )
   return 'success'
 }
 
-const MAX_FAILED_ATTEMPTS = 5;
+const MAX_FAILED_ATTEMPTS = 4
 
 const onFailedLogin = async (user: UserDocument, request: Request) => {
   const id = user._id
@@ -29,7 +35,7 @@ const onFailedLogin = async (user: UserDocument, request: Request) => {
     time,
     ipAddress,
     device,
-  }  
+  }
 
   if (
     user &&
@@ -57,5 +63,4 @@ const onFailedLogin = async (user: UserDocument, request: Request) => {
   return 'success'
 }
 
-
-export default {onLoginSuccess, onFailedLogin}
+export default { onLoginSuccess, onFailedLogin }
