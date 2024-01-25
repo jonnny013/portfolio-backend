@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import parsingUtils from '../utils/parsingUtils'
 import { check } from 'express-validator'
+import loginService from '../services/loginService'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -19,7 +20,7 @@ loginRouter.post('/',[check('username').isString(), check('password').isString()
       if (!(user && passwordCorrect)) {
         return response.status(400).json({ error: 'Invalid login information' })
       }
-
+      loginService.onLoginSuccess(user, request)
       const userForToken = {
         username: user.username,
         id: user._id,

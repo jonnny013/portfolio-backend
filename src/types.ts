@@ -36,17 +36,19 @@ export interface ContactFormType {
 }
 
 export interface LoginRecord {
-  time: string[]
-  ipAddress: string[]
-  device: string[]
+  time: string
+  ipAddress: string
+  device: string
 }
 
 export interface AccountStatus {
   active: boolean
   locked: boolean
+  failedLoginAttempts: number
 }
 
 export interface UserType {
+  _id?: string
   username: string
   password: string
   dateAdded: string

@@ -20,13 +20,10 @@ const addUser = async ({password, username}: {password: string, username: string
   const passwordHash = await bcrypt.hash(password, saltRounds)
   const accountStatus = {
     active: true,
-    locked: false
+    locked: false,
+    failedLoginAttempts: 0
   }
-  const loginRecord = {
-    time: [],
-    ipAddress: [],
-    device: []
-  }
+  const loginRecord: never[] = []
 
   const user = new User({
     username,

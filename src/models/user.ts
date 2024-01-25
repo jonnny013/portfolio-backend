@@ -13,6 +13,7 @@ const accountStatusSchema = new mongoose.Schema(
   {
     active: Boolean,
     locked: Boolean,
+    failedLoginAttempts: Number
   },
   { _id: false, versionKey: false }
 )
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
   },
   loginRecord: {
-    type: loginRecordSchema
+    type: [loginRecordSchema]
   },
   accountStatus: {
     type: accountStatusSchema
