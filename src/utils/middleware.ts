@@ -26,6 +26,10 @@ const errorHandler = (error: { message: unknown; name: string }, _request: Reque
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError' && error instanceof Error) {
     return response.status(400).json({ error: error.message })
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired',
+    })
   }
 
   return next(error)

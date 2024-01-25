@@ -38,7 +38,7 @@ loginRouter.post(
           id: user._id,
         }
 
-        const token = jwt.sign(userForToken, process.env.SECRET!)
+        const token = jwt.sign(userForToken, process.env.SECRET!, { expiresIn: 1440*60})
         return response.status(200).send({ token, username: user.username })
       } else {
         return response.status(400).json({ error: 'Invalid login information' })
