@@ -8,6 +8,7 @@ import middleware from './utils/middleware'
 import projectRouter from './controllers/projects'
 import aboutMeRouter from './controllers/aboutMePosts'
 import loginRouter from './controllers/login'
+import User from './models/user'
 
 mongoose.set('strictQuery', false)
 
@@ -29,6 +30,46 @@ if (typeof config.MONGODB_URI === 'string') {
       }
     })
 }
+
+//update old users
+
+const updateUsers = async () => {
+  try {
+    const users = await User.find()
+
+    for (const user of users) {
+      // Create a new user object with the updated schema
+      const updatedUser = {
+        username: user.username,
+        passwordHash: user.passwordHash,
+        dateAdded: user.dateAdded,
+        loginRecord: [
+          {
+            time: user.dateAdded, // or set it to a default value based on your requirements
+            ipAddress: '', // set a default or derive it from existing data
+            device: '', // set a default or derive it from existing data
+          },
+        ],
+        accountStatus: {
+          active: true, // set a default or derive it from existing data
+          locked: false, // set a default or derive it from existing data
+          failedLoginAttempts: 0, // set a default or derive it from existing data
+        },
+      }
+
+      // Save the updated user
+      await User.findByIdAndUpdate(user._id, updatedUser, { new: true })
+    }
+
+    console.log('User data migration complete.')
+  } catch (error) {
+    console.error('Error during user data migration:', error)
+  } finally {
+    void mongoose.disconnect()
+  }
+}
+
+void updateUsers()
 
 const app = express()
 app.use(express.json())
