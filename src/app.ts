@@ -42,7 +42,7 @@ app.use('/api/user', userRouter)
 app.use('/api/projects', projectRouter)
 app.use('/api/aboutMe', aboutMeRouter)
 app.use('/api/login', loginRouter)
-app.use('api/email', emailRouter)
+app.use('/api/email', emailRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

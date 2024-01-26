@@ -1,6 +1,15 @@
 import mongoose from 'mongoose'
 import { isEmail } from 'validator'
 
+const senderInfoSchema = new mongoose.Schema(
+  {
+    time: { type: Date },
+    ipAddress: String,
+    device: String,
+  },
+  { _id: false, versionKey: false }
+)
+
 const emailSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,7 +21,7 @@ const emailSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 5,
-    unique: true
+    unique: true,
   },
   subject: {
     type: String,
@@ -27,6 +36,9 @@ const emailSchema = new mongoose.Schema({
     required: true,
     validate: [isEmail, 'invalid email'],
   },
+  senderInfo: {
+    type: [senderInfoSchema],
+  },
 })
 
 emailSchema.set('toJSON', {
@@ -35,6 +47,7 @@ emailSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
+    delete returnedObject.senderInfo
   },
 })
 

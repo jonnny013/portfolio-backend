@@ -7,8 +7,8 @@ const emailRouter = express.Router()
 emailRouter.post('/', (async (request, response) => {
   try {
     const newEmail = utilCheck.parseEmail(request.body)
-    const addedPost =  await emailService.addEmail(newEmail)
-    return response.status(201).json(addedPost)
+    const addedPost =  await emailService.addEmail({email: newEmail, request})
+    return response.status(200).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
