@@ -1,39 +1,16 @@
-import express, { RequestHandler, Request } from 'express'
-import jwt from 'jsonwebtoken'
+import express, { RequestHandler } from 'express'
 import utilCheck from '../utils/parsingUtils'
 import projectService from '../services/projectService'
+import tokenCheck from '../services/tokenServices'
 const projectRouter = express.Router()
-
-const getTokenFrom = (request: Request): string | null => {
-  const authorization: string | undefined = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
 
 projectRouter.post('/', (async (request, response) => {
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
-    const newPost = utilCheck.parseNewProjectData(request.body)
+      const newPost = utilCheck.parseNewProjectData(request.body)
     console.log('here1')
     const addedPost = await projectService.addProject(newPost)
     console.log('here2')
@@ -72,23 +49,8 @@ projectRouter.get('/:id', (async (request, response) => {
 
 projectRouter.delete('/:id', (async (request, response) => {
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
     await projectService.deleteProject(request.params.id)
@@ -102,23 +64,8 @@ projectRouter.put('/:id', (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
     const newPost = utilCheck.parseOldProjectData(post)

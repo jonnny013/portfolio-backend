@@ -1,20 +1,12 @@
-import express, { RequestHandler, Request } from 'express'
+import express, { RequestHandler } from 'express'
 import utilCheck from '../utils/parsingUtils'
 import aboutMeService from '../services/aboutMeService'
 import multer from 'multer'
 import path from 'path'
 import { NewAboutMeType } from '../types'
-import jwt from 'jsonwebtoken'
+import tokenCheck from '../services/tokenServices'
 
 const aboutMeRouter = express.Router()
-
-const getTokenFrom = (request: Request): string | null => {
-  const authorization: string | undefined = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
 
 const storage = multer.diskStorage({
   destination: function (_req, _res, cb) {
@@ -47,23 +39,8 @@ aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => 
     picture: request.file?.filename,
   }
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
     const newPost: NewAboutMeType = utilCheck.parseNewAboutMeData(data)
@@ -102,25 +79,10 @@ aboutMeRouter.get('/:id', (async (request, response) => {
 
 aboutMeRouter.delete('/:id', (async (request, response) => {
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
+const result = await tokenCheck(request)
+if (result !== 'Token authenticated') {
+  return response.status(401).json({ error: 'Token invalid' })
+}
     await aboutMeService.deleteAboutMePost(request.params.id)
     return response.status(200).json({ message: 'Successful deletion' })
   } catch (error) {
@@ -132,23 +94,8 @@ aboutMeRouter.put('/:id', (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
   try {
-    const token = getTokenFrom(request)
-
-    if (token === null) {
-      return response.status(401).json({ error: 'Token not provided' })
-    }
-
-    const secret = process.env.SECRET
-
-    if (!secret) {
-      return response
-        .status(500)
-        .json({ error: 'Internal server error: JWT secret not configured' })
-    }
-
-    const decodedToken = jwt.verify(token, secret) as { id?: string }
-
-    if (!decodedToken.id) {
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
     const newPost = utilCheck.parseOldAboutMeData(post)
