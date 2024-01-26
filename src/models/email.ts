@@ -15,7 +15,6 @@ const emailSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: 3,
-    unique: true,
   },
   message: {
     type: String,
