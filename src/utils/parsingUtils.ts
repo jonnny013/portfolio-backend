@@ -1,4 +1,4 @@
-import { AboutMeInfoType, AboutMeType, NewAboutMeType, NewProject, NewUser, ProjectType, Skills } from '../types'
+import { AboutMeInfoType, AboutMeType, NewAboutMeType, NewEmail, NewProject, NewUser, ProjectType, Skills } from '../types'
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String
@@ -171,6 +171,25 @@ const parseOldAboutMeData =  (startingObject: unknown): AboutMeType => {
   throw new Error('Incorrect data: some fields are missing')
 }
 
+const parseEmail = (startingObject: unknown): NewEmail => {
+  const object = parseObject(startingObject) 
+  if (
+    'email' in object &&
+    'name' in object &&
+    'message' in object &&
+    'subject' in object
+  ) {
+    const newAboutmePost: NewEmail = {
+      email: parseString(object.email, 'email'),
+      name: parseString(object.name, 'name'),
+      message: parseString(object.message, 'message'),
+      subject: parseString(object.subject, 'subject'),
+    }
+    return newAboutmePost
+  }
+  throw new Error('Incorrect data: some fields are missing')
+}
+
 
 export default {
   parseUserData,
@@ -178,5 +197,6 @@ export default {
   parseOldProjectData,
   parseOldAboutMeData,
   parseNewAboutMeData,
-  isString
+  isString,
+  parseEmail
 }

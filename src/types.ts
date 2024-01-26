@@ -35,6 +35,8 @@ export interface ContactFormType {
   dateAdded: string
 }
 
+export type NewEmail = Omit<ContactFormType, 'dateAdded'>
+
 export interface LoginRecord {
   time: string
   ipAddress: string

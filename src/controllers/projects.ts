@@ -11,9 +11,7 @@ projectRouter.post('/', (async (request, response) => {
       return response.status(401).json({ error: 'Token invalid' })
     }
       const newPost = utilCheck.parseNewProjectData(request.body)
-    console.log('here1')
     const addedPost = await projectService.addProject(newPost)
-    console.log('here2')
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
