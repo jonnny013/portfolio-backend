@@ -8,11 +8,15 @@
     "tsc": "tsc",
     "dev": "NODE_ENV=development ts-node-dev index.ts",
     "lint": "eslint --ext .ts",
-    "start": "NODE_ENV=production node build/index.js"
+    "start": "NODE_ENV=production node build/index.js",
+    "build:ui": "rm -rf dist && cd ../portfolio/ && npm run build && cp -r dist ../portfolio-backend",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run tsc && npm run build:ui && npm run deploy"
   },
   "author": "Jon Love",
   "license": "ISC",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",

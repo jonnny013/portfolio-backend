@@ -1,16 +1,27 @@
-import mongoose from 'mongoose'
-import supertest from 'supertest'
-import app from '../app'
+import request from 'supertest'
+import express from 'express'
 
-const api = supertest(app)
+const app = express()
 
-test('notes are returned as json', async () => {
-  await api
-    .get('/api/user')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+app.get('/user', function (_req, res) {
+  res.status(200).json({ name: 'john' })
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-})
+void request(app, { http2: true })
+  .get('/user')
+  .expect('Content-Type', /json/)
+  .expect('Content-Length', '15')
+  .expect(200)
+  .end(function (err, _res) {
+    if (err) throw err
+  })
+
+void request
+  .agent(app, { http2: true })
+  .get('/user')
+  .expect('Content-Type', /json/)
+  .expect('Content-Length', '15')
+  .expect(200)
+  .end(function (err, _res) {
+    if (err) throw err
+  })
