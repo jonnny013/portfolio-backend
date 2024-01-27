@@ -5,6 +5,7 @@ import multer from 'multer'
 import path from 'path'
 import { NewAboutMeType } from '../types'
 import tokenCheck from '../services/tokenServices'
+import logger from '../utils/logger'
 
 const aboutMeRouter = express.Router()
 
@@ -47,6 +48,7 @@ aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => 
     const addedPost = await aboutMeService.addAboutMePost(newPost)
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
+    logger.error(error)
     let errorMessage = 'Something went wrong.'
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
       return response.status(400).send('Title is already taken')
@@ -86,6 +88,7 @@ if (result !== 'Token authenticated') {
     await aboutMeService.deleteAboutMePost(request.params.id)
     return response.status(200).json({ message: 'Successful deletion' })
   } catch (error) {
+    logger.error(error)
     return response.status(400).json({error: 'Delete unsuccessful'})
   }
 }) as RequestHandler)
@@ -103,6 +106,7 @@ aboutMeRouter.put('/:id', (async (request, response) => {
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
+    logger.error(error)
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
       return response.status(400).send('Title is already taken')
       return

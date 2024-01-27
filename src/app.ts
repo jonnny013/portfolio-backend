@@ -9,6 +9,7 @@ import projectRouter from './controllers/projects'
 import aboutMeRouter from './controllers/aboutMePosts'
 import loginRouter from './controllers/login'
 import emailRouter from './controllers/emailContact'
+import visitorRouter from './controllers/visitor'
 
 mongoose.set('strictQuery', false)
 
@@ -43,6 +44,7 @@ app.use('/api/projects', projectRouter)
 app.use('/api/aboutMe', aboutMeRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/email', emailRouter)
+app.use('/api/visitorLog', visitorRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
