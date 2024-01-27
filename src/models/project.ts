@@ -40,7 +40,6 @@ const projectSchema = new mongoose.Schema({
   },
   sourceCode: {
     type: String,
-    required: true,
     minLength: 5,
   },
   skills: {

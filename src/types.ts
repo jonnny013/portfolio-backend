@@ -5,7 +5,7 @@ export interface ProjectType {
   description: string
   skills: Skills
   website: string
-  sourceCode: string
+  sourceCode?: string
   dateAdded: string
   recommended: boolean
 }

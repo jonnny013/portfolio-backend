@@ -1,4 +1,13 @@
-import { AboutMeInfoType, AboutMeType, NewAboutMeType, NewEmail, NewProject, NewUser, ProjectType, Skills } from '../types'
+import {
+  AboutMeInfoType,
+  AboutMeType,
+  NewAboutMeType,
+  NewEmail,
+  NewProject,
+  NewUser,
+  ProjectType,
+  Skills,
+} from '../types'
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String
@@ -102,9 +111,11 @@ const parseNewProjectData = (startingObject: unknown): NewProject => {
       project: parseString(object.project, 'project'),
       description: parseString(object.description, 'description'),
       website: parseString(object.website, 'website'),
-      sourceCode: parseString(object.sourceCode, 'sourceCode'),
+      sourceCode: 'sourceCode' in object
+        ? parseString(object.sourceCode, 'sourceCode')
+        : undefined,
       skills: parseSkills(object.skills),
-      recommended: parseBoolean(object.recommended, 'recommended')
+      recommended: parseBoolean(object.recommended, 'recommended'),
     }
     return newProject
   }
@@ -125,7 +136,9 @@ const parseOldProjectData = (startingObject: unknown): ProjectType => {
 }
 
 const isInfoType = (object: string): object is AboutMeInfoType => {
-  return Object.values(AboutMeInfoType).map(val => val.toString()).includes(object)
+  return Object.values(AboutMeInfoType)
+    .map(val => val.toString())
+    .includes(object)
 }
 
 const parseAboutMeType = (object: unknown): AboutMeInfoType => {
@@ -135,8 +148,7 @@ const parseAboutMeType = (object: unknown): AboutMeInfoType => {
   return object
 }
 
-
-const parseNewAboutMeData =  (startingObject: unknown): NewAboutMeType => {
+const parseNewAboutMeData = (startingObject: unknown): NewAboutMeType => {
   const object = parseObject(startingObject)
 
   if (
@@ -147,7 +159,7 @@ const parseNewAboutMeData =  (startingObject: unknown): NewAboutMeType => {
     'type' in object
   ) {
     const newAboutmePost: NewAboutMeType = {
-      picture:  parseString(object.picture, 'picture'),
+      picture: parseString(object.picture, 'picture'),
       name: parseString(object.name, 'name'),
       description: parseString(object.description, 'description'),
       picDesc: parseString(object.picDesc, 'picDesc'),
@@ -158,11 +170,11 @@ const parseNewAboutMeData =  (startingObject: unknown): NewAboutMeType => {
   throw new Error('Incorrect data: some fields are missing')
 }
 
-const parseOldAboutMeData =  (startingObject: unknown): AboutMeType => {
+const parseOldAboutMeData = (startingObject: unknown): AboutMeType => {
   const object = parseObject(startingObject)
   if ('id' in object && 'dateAdded' in object) {
     const parsedObject: AboutMeType = {
-       ...parseNewAboutMeData(object),
+      ...parseNewAboutMeData(object),
       id: parseString(object.id, 'id'),
       dateAdded: parseDate(object.dateAdded),
     }
@@ -172,7 +184,7 @@ const parseOldAboutMeData =  (startingObject: unknown): AboutMeType => {
 }
 
 const parseEmail = (startingObject: unknown): NewEmail => {
-  const object = parseObject(startingObject) 
+  const object = parseObject(startingObject)
   if (
     'email' in object &&
     'name' in object &&
@@ -190,7 +202,6 @@ const parseEmail = (startingObject: unknown): NewEmail => {
   throw new Error('Incorrect data: some fields are missing')
 }
 
-
 export default {
   parseUserData,
   parseNewProjectData,
@@ -198,5 +209,5 @@ export default {
   parseOldAboutMeData,
   parseNewAboutMeData,
   isString,
-  parseEmail
+  parseEmail,
 }
