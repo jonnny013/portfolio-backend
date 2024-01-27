@@ -15,7 +15,7 @@ const addVisitor = async (request: Request) => {
       const newVisitRecord = {
         time: new Date().toString(),
         device: request.get('User-Agent'),
-        vistedPaths: request.path,
+        visitedPaths: request.path,
       }
       await VisitorRecord.findByIdAndUpdate(ipAlreadyVisited._id, {
         $push: { visitRecord: newVisitRecord },
@@ -27,9 +27,9 @@ const addVisitor = async (request: Request) => {
         visitRecord: {
           time: new Date().toString(),
           device: request.get('User-Agent'),
-          vistedPaths: request.path,
+          visitedPaths: request.path,
         },
-        visits: 1
+        visits: 1,
       })
       await newVisitRecord.save()
     }

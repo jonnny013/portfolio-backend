@@ -1,10 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 import logger from './logger'
+import visitorInfoService from '../services/visitorInfoService'
 
 const requestLogger = (request: Request, response: Response, next: NextFunction) => {
+  visitorInfoService.addVisitor(request).catch(error => {
+    logger.error('Error in addVisitor:', error)
+  })
   logger.info('Method: ', request.method)
   logger.info('Path: ', request.path)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   logger.info('Body: ', request.body)
   response.on('finish', () => {
     logger.info('Status:', response.statusCode)
