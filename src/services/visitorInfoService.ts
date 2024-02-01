@@ -9,7 +9,7 @@ const getVisitor = async () => {
 
 const addVisitor = async (request: Request) => {
   try {
-    const ipAddress = request.ip
+    const ipAddress = request.socket.remoteAddress
     const ipAlreadyVisited = await VisitorRecord.findOne({ ipAddress })
     if (ipAlreadyVisited) {
       const newVisitRecord = {

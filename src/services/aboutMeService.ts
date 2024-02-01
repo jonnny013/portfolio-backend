@@ -13,6 +13,7 @@ const getSingleAboutMePost = async (id: string) => {
 
 const deleteAboutMePost = async (id: string) => {
   const response = await AboutMePost.findByIdAndDelete(id)
+  
   return response
 }
 

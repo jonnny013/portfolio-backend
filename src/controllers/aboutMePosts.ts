@@ -6,6 +6,8 @@ import path from 'path'
 import { NewAboutMeType } from '../types'
 import tokenCheck from '../services/tokenServices'
 import logger from '../utils/logger'
+import fs from 'fs'
+import { MongoServerError } from 'mongodb'
 
 const aboutMeRouter = express.Router()
 
@@ -48,9 +50,14 @@ aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => 
     const addedPost = await aboutMeService.addAboutMePost(newPost)
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
-    logger.error(error)
+    logger.error('here: ', error)
     let errorMessage = 'Something went wrong.'
-    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+    if (request.file) {
+      const filePath = path.join('./public/images', request.file.filename)
+      fs.unlinkSync(filePath)
+    }
+    if (error instanceof MongoServerError && error.message.includes('duplicate key')) {
+      console.log('senttttt')
       return response.status(400).send('Title is already taken')
     }
 
@@ -81,28 +88,65 @@ aboutMeRouter.get('/:id', (async (request, response) => {
 
 aboutMeRouter.delete('/:id', (async (request, response) => {
   try {
-const result = await tokenCheck(request)
-if (result !== 'Token authenticated') {
-  return response.status(401).json({ error: 'Token invalid' })
-}
+    const result = await tokenCheck(request)
+    if (result !== 'Token authenticated') {
+      return response.status(401).json({ error: 'Token invalid' })
+    }
+    const existingPost = await aboutMeService.getSingleAboutMePost(request.params.id)
+
     await aboutMeService.deleteAboutMePost(request.params.id)
+    if (request.file && existingPost && existingPost.picture) {
+      try {
+        const oldPicturePath = path.join('./public/images', existingPost.picture)
+        fs.unlinkSync(oldPicturePath)
+      } catch (error) {
+        if (error && typeof error === 'object' && 'message' in error) {
+          console.error('Error deleting old picture:', error.message)
+        } else {
+          console.error('Couldnt delete file')
+        }
+      }
+    }
     return response.status(200).json({ message: 'Successful deletion' })
   } catch (error) {
     logger.error(error)
-    return response.status(400).json({error: 'Delete unsuccessful'})
+    return response.status(400).json({ error: 'Delete unsuccessful' })
   }
 }) as RequestHandler)
 
-aboutMeRouter.put('/:id', (async (request, response) => {
+aboutMeRouter.put('/:id', upload.single('picture'), (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
+  console.log('router post: ', post)
   try {
     const result = await tokenCheck(request)
     if (result !== 'Token authenticated') {
       return response.status(401).json({ error: 'Token invalid' })
     }
-    const newPost = utilCheck.parseOldAboutMeData(post)
+
+    const existingPost = await aboutMeService.getSingleAboutMePost(id)
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const object = {
+      ...(typeof post === 'object' ? post : { post }),
+      ...(post && typeof post === 'object' && 'formdata' in post
+        ? { picture: request.file?.filename }
+        : {}),
+    }
+    const newPost = utilCheck.parseOldAboutMeData(object)
     const addedPost = await aboutMeService.editAboutMePost(newPost, id)
+    if (request.file && existingPost && existingPost.picture) {
+      try {
+        const oldPicturePath = path.join('./public/images', existingPost.picture)
+        fs.unlinkSync(oldPicturePath)
+      } catch (error) {
+        if (error && typeof error === 'object' && 'message' in error) {
+          console.error('Error deleting old picture:', error.message)
+        } else {
+          console.error('Couldnt delete file')
+        }
+      }
+    }
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'

@@ -5,7 +5,6 @@ import User from '../models/user'
 const getTokenFrom = (request: Request): string | null => {
   
   if ('get' in request && request.get('authorization') !== undefined) {
-    console.log('wow')
     const authorization: string | undefined = request.get('authorization')
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')

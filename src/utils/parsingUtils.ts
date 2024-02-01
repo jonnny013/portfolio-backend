@@ -172,6 +172,7 @@ const parseNewAboutMeData = (startingObject: unknown): NewAboutMeType => {
 
 const parseOldAboutMeData = (startingObject: unknown): AboutMeType => {
   const object = parseObject(startingObject)
+  console.log('parsing object:',object)
   if ('id' in object && 'dateAdded' in object) {
     const parsedObject: AboutMeType = {
       ...parseNewAboutMeData(object),
