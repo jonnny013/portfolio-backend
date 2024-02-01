@@ -23,7 +23,7 @@ projectRouter.post('/', (async (request, response) => {
     }
 
     if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message + error
+      errorMessage += ' Error: ' + error.message 
     }
     return response.status(400).send(errorMessage)
   }

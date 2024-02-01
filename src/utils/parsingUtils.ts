@@ -111,7 +111,7 @@ const parseNewProjectData = (startingObject: unknown): NewProject => {
       project: parseString(object.project, 'project'),
       description: parseString(object.description, 'description'),
       website: parseString(object.website, 'website'),
-      sourceCode: 'sourceCode' in object
+      sourceCode: object.sourceCode !== ''
         ? parseString(object.sourceCode, 'sourceCode')
         : undefined,
       skills: parseSkills(object.skills),
