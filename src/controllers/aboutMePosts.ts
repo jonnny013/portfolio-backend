@@ -153,7 +153,6 @@ aboutMeRouter.put('/:id', upload.single('picture'), (async (request, response) =
     logger.error(error)
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
       return response.status(400).send('Title is already taken')
-      return
     }
 
     if (error instanceof Error) {
