@@ -10,6 +10,7 @@ import aboutMeRouter from './controllers/aboutMePosts'
 import loginRouter from './controllers/login'
 import emailRouter from './controllers/emailContact'
 import visitorRouter from './controllers/visitor'
+import path from 'path'
 
 mongoose.set('strictQuery', false)
 
@@ -32,12 +33,15 @@ if (typeof config.MONGODB_URI === 'string') {
     })
 }
 
+const staticFilesPath = path.join(__dirname, '../../dist')
+console.log(staticFilesPath)
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(express.static('public'))
 app.use(express.static('dist'))
+app.use(express.static(staticFilesPath))
 app.use(middleware.requestLogger)
 
 app.use('/api/user', userRouter)
@@ -46,6 +50,10 @@ app.use('/api/aboutMe', aboutMeRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/visitorLog', visitorRouter)
+
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(staticFilesPath, 'index.html'))
+})
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
