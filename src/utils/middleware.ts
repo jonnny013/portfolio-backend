@@ -16,7 +16,10 @@ const requestLogger = (request: Request, response: Response, next: NextFunction)
   logger.info('---')
   logger.info(
     'User IP: ',
-    request.socket.remoteAddress,
+    (request.headers['x-forwarded-for'] || request.connection.remoteAddress || '')
+      .toString()
+      .split(',')[0]
+      .trim(),
     'user agent: ',
     request.get('User-Agent')
   )

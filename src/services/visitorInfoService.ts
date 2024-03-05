@@ -9,7 +9,15 @@ const getVisitor = async () => {
 
 const addVisitor = async (request: Request) => {
   try {
-    const ipAddress = request.socket.remoteAddress
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const ipAddress: string = (
+      request.headers['x-forwarded-for'] ||
+      request.connection.remoteAddress ||
+      ''
+    )
+      .toString()
+      .split(',')[0]
+      .trim()
     const ipAlreadyVisited = await VisitorRecord.findOne({ ipAddress })
     if (ipAlreadyVisited) {
       const newVisitRecord = {
