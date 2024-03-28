@@ -3,16 +3,17 @@ import jwt from 'jsonwebtoken'
 import User from '../models/user'
 
 const getTokenFrom = (request: Request): string | null => {
-  
-  if ('get' in request && request.get('authorization') !== undefined) {
-    const authorization: string | undefined = request.get('authorization')
+  console.log('called')
+  if ( request.headers.authorization !== undefined) {
+    console.log('inside called')
+    console.log(request.headers)
+    const authorization: string | undefined = request.headers.authorization
     if (authorization && authorization.startsWith('Bearer ')) {
       return authorization.replace('Bearer ', '')
     } else {
       return null
     }
   }
-
   return null
 }
 
