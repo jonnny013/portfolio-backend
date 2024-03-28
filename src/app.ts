@@ -12,6 +12,7 @@ import emailRouter from './controllers/emailContact'
 import visitorRouter from './controllers/visitor'
 import path from 'path'
 
+
 mongoose.set('strictQuery', false)
 
 if (typeof config.MONGODB_URI === 'string') {
