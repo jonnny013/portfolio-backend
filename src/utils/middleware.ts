@@ -3,7 +3,7 @@ import logger from './logger'
 import visitorInfoService from '../services/visitorInfoService'
 
 const requestLogger = (request: Request, response: Response, next: NextFunction) => {
-  visitorInfoService.addVisitor(request).catch(error => {
+  process.env.NODE_ENV !== 'test' && visitorInfoService.addVisitor(request).catch(error => {
     logger.error('Error in addVisitor:', error)
   })
   logger.info('Method: ', request.method)

@@ -1,27 +1,49 @@
-// import request from 'supertest'
-// import express from 'express'
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+import { test, after, beforeEach } from 'node:test'
+import assert from 'node:assert'
+import mongoose from 'mongoose'
+import supertest from 'supertest'
+import app from '../app'
+import User from '../models/user'
 
-// const app = express()
+const api = supertest(app)
 
-// app.get('/user', function (_req, res) {
-//   res.status(200).json({ username: 'john' })
-// })
+const initialUser = {
+  username: 'test123',
+  password: 'test123',
+}
 
-// void request(app, { http2: true })
-//   .get('/user')
-//   .expect('Content-Type', /json/)
-//   .expect('Content-Length', '15')
-//   .expect(200)
-//   .end(function (err, _res) {
-//     if (err) throw err
-//   })
+const newUser = {
+  username: 'test124',
+  password: 'test123',
+}
 
-// void request
-//   .agent(app, { http2: true })
-//   .get('/user')
-//   .expect('Content-Type', /json/)
-//   .expect('Content-Length', '15')
-//   .expect(200)
-//   .end(function (err, _res) {
-//     if (err) throw err
-//   })
+beforeEach(async () => {
+  await User.deleteMany({})
+  const user = new User(initialUser)
+  await user.save()
+})
+
+test('can make user', async () => {
+  await api
+    .post('/api/user')
+    .send(newUser)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+})
+
+test('users are returned with get request', async () => {
+  const response = await api.get('/api/user').expect(200)
+
+  const usernames = response.body.map(e => e.username)
+  assert(usernames.includes('test123'))
+})
+
+after(async () => {
+  await mongoose.connection.close()
+})
