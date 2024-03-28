@@ -1,17 +1,13 @@
 import express, { RequestHandler } from 'express'
 import utilCheck from '../utils/parsingUtils'
 import projectService from '../services/projectService'
-import tokenCheck from '../services/tokenServices'
+import  middleware  from '../utils/middleware'
 import logger from '../utils/logger'
 const projectRouter = express.Router()
 
-projectRouter.post('/', (async (request, response) => {
+projectRouter.post('/', middleware.tokenCheck, (async (request, response) => {
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
-      const newPost = utilCheck.parseNewProjectData(request.body)
+    const newPost = utilCheck.parseNewProjectData(request.body)
     const addedPost = await projectService.addProject(newPost)
     return response.status(201).json(addedPost)
   } catch (error: unknown) {
@@ -47,28 +43,20 @@ projectRouter.get('/:id', (async (request, response) => {
   }
 }) as RequestHandler)
 
-projectRouter.delete('/:id', (async (request, response) => {
+projectRouter.delete('/:id', middleware.tokenCheck, (async (request, response) => {
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
     await projectService.deleteProject(request.params.id)
     return response.status(200).json({ message: 'Successful deletion' })
   } catch (error) {
     logger.error(error)
-    return response.status(400).json({error: 'Delete unsuccessful'})
+    return response.status(400).json({ error: 'Delete unsuccessful' })
   }
 }) as RequestHandler)
 
-projectRouter.put('/:id', (async (request, response) => {
+projectRouter.put('/:id', middleware.tokenCheck, (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
     const newPost = utilCheck.parseOldProjectData(post)
     const addedPost = await projectService.editProject(newPost, id)
     return response.status(201).json(addedPost)

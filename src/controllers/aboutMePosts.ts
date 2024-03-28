@@ -4,7 +4,7 @@ import aboutMeService from '../services/aboutMeService'
 import multer from 'multer'
 import path from 'path'
 import { NewAboutMeType } from '../types'
-import tokenCheck from '../services/tokenServices'
+import middleware from '../utils/middleware'
 import logger from '../utils/logger'
 import fs from 'fs'
 import { MongoServerError } from 'mongodb'
@@ -25,7 +25,10 @@ const upload = multer({
   storage: storage,
 })
 
-aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => {
+aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async (
+  request,
+  response
+) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const {
     name,
@@ -42,10 +45,6 @@ aboutMeRouter.post('/', upload.single('picture'), (async (request, response) => 
     picture: request.file?.filename,
   }
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
     const newPost: NewAboutMeType = utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost(newPost)
     return response.status(201).json(addedPost)
@@ -86,12 +85,8 @@ aboutMeRouter.get('/:id', (async (request, response) => {
   }
 }) as RequestHandler)
 
-aboutMeRouter.delete('/:id', (async (request, response) => {
+aboutMeRouter.delete('/:id', middleware.tokenCheck, (async (request, response) => {
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
     const existingPost = await aboutMeService.getSingleAboutMePost(request.params.id)
 
     await aboutMeService.deleteAboutMePost(request.params.id)
@@ -114,16 +109,14 @@ aboutMeRouter.delete('/:id', (async (request, response) => {
   }
 }) as RequestHandler)
 
-aboutMeRouter.put('/:id', upload.single('picture'), (async (request, response) => {
+aboutMeRouter.put('/:id', middleware.tokenCheck, upload.single('picture'), (async (
+  request,
+  response
+) => {
   const id = request.params.id
   const post: unknown = request.body
   console.log('router post: ', post)
   try {
-    const result = await tokenCheck(request)
-    if (result !== 'Token authenticated') {
-      return response.status(401).json({ error: 'Token invalid' })
-    }
-
     const existingPost = await aboutMeService.getSingleAboutMePost(id)
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

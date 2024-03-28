@@ -1,6 +1,5 @@
 import express, { RequestHandler } from 'express'
-// import utilCheck from '../utils/parsingUtils'
-import tokenCheck from '../services/tokenServices'
+import middleware from '../utils/middleware'
 import logger from '../utils/logger'
 import visitorInfoService from '../services/visitorInfoService'
 const visitorRouter = express.Router()
@@ -23,12 +22,8 @@ visitorRouter.post('/', (async (request, response) => {
   }
 }) as RequestHandler)
 
-visitorRouter.get('/', (async (request, response) => {
+visitorRouter.get('/', middleware.tokenCheck, (async (_request, response) => {
   try {
-const result = await tokenCheck(request)
-  if (result !== 'Token authenticated') {
-    return response.status(401).json({ error: 'Token invalid' })
-  }
   const user = await visitorInfoService.getVisitor()
   if (user) {
     return response.json(user)
