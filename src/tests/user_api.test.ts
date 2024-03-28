@@ -27,11 +27,14 @@ test('can make user', async () => {
 })
 
 test('duplicate user cannot be made', async () => {
-  await api.post('/api/user').send(helper.initialUser).expect(400)
 
-  //const response = await api.post('/api/user').send(helper.initialUser).expect(400)
+  const response = await api.post('/api/user').send(helper.initialUser).expect(400)
 
-  // assert(response.body == 'Username is already taken')
+  assert.strictEqual(
+    response.text,
+    'Username is already taken',
+    'Expected message "Username is already taken" in response'
+  )
 })
 
 test('users are returned with get request', async () => {
