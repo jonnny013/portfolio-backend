@@ -24,17 +24,16 @@ visitorRouter.post('/', (async (request, response) => {
 
 visitorRouter.get('/', middleware.tokenCheck, (async (_request, response) => {
   try {
-  const user = await visitorInfoService.getVisitor()
-  if (user) {
-    return response.json(user)
-  } else {
-    return response.sendStatus(404)
-  }
+    const user = await visitorInfoService.getVisitor()
+    if (user) {
+      response.json(user)
+    } else {
+      response.sendStatus(404)
+    }
   } catch (error) {
-    logger.error(error) 
-    return response.status(401).send({ error: error})
+    logger.error(error)
+    response.status(401).send({ error: error })
   }
-  
 }) as RequestHandler)
 
 export default visitorRouter

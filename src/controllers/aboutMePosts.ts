@@ -47,7 +47,7 @@ aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async 
   try {
     const newPost: NewAboutMeType = utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost(newPost)
-    return response.status(201).json(addedPost)
+    response.status(201).json(addedPost)
   } catch (error: unknown) {
     logger.error('here: ', error)
     let errorMessage = 'Something went wrong.'
@@ -57,13 +57,13 @@ aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async 
     }
     if (error instanceof MongoServerError && error.message.includes('duplicate key')) {
       console.log('senttttt')
-      return response.status(400).send('Title is already taken')
+      response.status(400).send('Title is already taken')
     }
 
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message
     }
-    return response.status(400).send(errorMessage)
+    response.status(400).send(errorMessage)
   }
 }) as RequestHandler)
 
@@ -102,10 +102,10 @@ aboutMeRouter.delete('/:id', middleware.tokenCheck, (async (request, response) =
         }
       }
     }
-    return response.status(200).json({ message: 'Successful deletion' })
+    response.status(200).json({ message: 'Successful deletion' })
   } catch (error) {
     logger.error(error)
-    return response.status(400).json({ error: 'Delete unsuccessful' })
+    response.status(400).json({ error: 'Delete unsuccessful' })
   }
 }) as RequestHandler)
 
@@ -140,18 +140,18 @@ aboutMeRouter.put('/:id', middleware.tokenCheck, upload.single('picture'), (asyn
         }
       }
     }
-    return response.status(201).json(addedPost)
+    response.status(201).json(addedPost)
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
     logger.error(error)
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
-      return response.status(400).send('Title is already taken')
+      response.status(400).send('Title is already taken')
     }
 
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message
     }
-    return response.status(400).send(errorMessage)
+    response.status(400).send(errorMessage)
   }
 }) as RequestHandler)
 

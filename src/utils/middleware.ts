@@ -10,21 +10,23 @@ declare module 'express' {
   }
 }
 
-
-const tokenCheck = (req: Request, res: Response, next: NextFunction) => {
+const tokenCheck = (req: Request, res: Response, next: NextFunction): void => {
   const authorization = req.get('authorization')
 
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       if (!config.SECRET) {
-        return res.status(500).json({ error: 'Internal server error' })
+        res.status(500).json({ error: 'Internal server error' })
+        return
       }
       req.decodedToken = jwt.verify(authorization.substring(7), config.SECRET)
     } catch {
-      return res.status(401).json({ error: 'token invalid' })
+      res.status(401).json({ error: 'token invalid' })
+      return
     }
   } else {
-    return res.status(401).json({ error: 'token missing' })
+    res.status(401).json({ error: 'token missing' })
+    return
   }
   next()
   return
@@ -68,13 +70,16 @@ const errorHandler = (
   logger.error(error.message)
 
   if (error.name === 'CastError' && error instanceof Error) {
-    return response.status(400).send({ error: 'malformatted id' })
+    response.status(400).send({ error: 'malformatted id' })
+    return
   } else if (error.name === 'ValidationError' && error instanceof Error) {
-    return response.status(400).json({ error: error.message })
+    response.status(400).json({ error: error.message })
+    return
   } else if (error.name === 'TokenExpiredError') {
-    return response.status(401).json({
+    response.status(401).json({
       error: 'token expired',
     })
+    return
   }
 
   return next(error)

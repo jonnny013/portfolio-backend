@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express'
+import express, { Request, Response } from 'express'
 import User from '../models/user'
 const loginRouter = express.Router()
 import jwt from 'jsonwebtoken'
@@ -13,13 +13,13 @@ dotenv.config()
 loginRouter.post(
   '/',
   [check('username').isString(), check('password').isString()],
-  (async (request, response) => {
+  async (request: Request, response: Response): Promise<void> => {
     const { username, password } = request.body as { username: string; password: string }
 
     if (username && parsingUtils.isString(username) && parsingUtils.isString(password)) {
       const user: UserDocument | null = await User.findOne({ username })
       if (user?.accountStatus.locked) {
-        return response.status(403).json({error: 'Your account has been locked'})
+        response.status(403).json({ error: 'Your account has been locked' })
       }
       if (user && 'passwordHash' in user && user.passwordHash) {
         const passwordCorrect: boolean =
@@ -29,7 +29,7 @@ loginRouter.post(
           void loginService.onFailedLogin(user, request)
         }
         if (!(user && passwordCorrect)) {
-          return response.status(400).json({ error: 'Invalid login information' })
+          response.status(400).json({ error: 'Invalid login information' })
         }
         void loginService.onLoginSuccess(user, request)
         const userForToken = {
@@ -38,15 +38,17 @@ loginRouter.post(
           id: user._id,
         }
 
-        const token = jwt.sign(userForToken, process.env.SECRET!, { expiresIn: 1440*60})
-        return response.status(200).send({ token, username: user.username })
+        const token = jwt.sign(userForToken, process.env.SECRET!, {
+          expiresIn: 1440 * 60,
+        })
+        response.status(200).send({ token, username: user.username })
       } else {
-        return response.status(400).json({ error: 'Invalid login information' })
+        response.status(400).json({ error: 'Invalid login information' })
       }
     } else {
-      return response.status(400).json({ error: 'Invalid login information' })
+      response.status(400).json({ error: 'Invalid login information' })
     }
-  }) as RequestHandler
+  }
 )
 
 export default loginRouter
