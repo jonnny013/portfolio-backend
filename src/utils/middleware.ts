@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import logger from './logger'
 import visitorInfoService from '../services/visitorInfoService'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import config from './config'
+import config from '../config/config'
 
 declare module 'express' {
   interface Request {

@@ -10,4 +10,4 @@ const MONGODB_URI =
 
 const SECRET: Secret | GetPublicKeyOrSecret | undefined = process.env.SECRET
 
-export default { PORT, MONGODB_URI, SECRET}
+export default { PORT, MONGODB_URI, SECRET }

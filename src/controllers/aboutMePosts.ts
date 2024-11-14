@@ -1,42 +1,28 @@
 import express, { RequestHandler } from 'express'
 import utilCheck from '../utils/parsingUtils'
 import aboutMeService from '../services/aboutMeService'
-import multer from 'multer'
 import path from 'path'
-import { NewAboutMeType } from '../types'
 import middleware from '../utils/middleware'
 import logger from '../utils/logger'
 import fs from 'fs'
 import { MongoServerError } from 'mongodb'
+import { upload } from '../config/multer_file_config'
 
 const aboutMeRouter = express.Router()
 
-const storage = multer.diskStorage({
-  destination: function (_req, _res, cb) {
-    cb(null, './public/images')
-  },
-  filename: function (_req, file, cb) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    cb(null, Date.now() + path.extname(file.originalname))
-  },
-})
-
-const upload = multer({
-  storage: storage,
-})
+interface RequestBody {
+  name: unknown
+  description: unknown
+  picDesc: unknown
+  type: unknown
+}
 
 aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async (
   request,
   response
 ) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const {
-    name,
-    description,
-    picDesc,
-    type,
-  }: { name: unknown; description: unknown; picDesc: unknown; type: unknown } =
-    request.body
+  const { name, description, picDesc, type }: RequestBody = request.body
   const data: unknown = {
     name,
     description,
@@ -45,25 +31,15 @@ aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async 
     picture: request.file?.filename,
   }
   try {
-    const newPost: NewAboutMeType = utilCheck.parseNewAboutMeData(data)
+    const newPost = utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost(newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
     logger.error('here: ', error)
-    let errorMessage = 'Something went wrong.'
-    if (request.file) {
-      const filePath = path.join('./public/images', request.file.filename)
-      fs.unlinkSync(filePath)
-    }
     if (error instanceof MongoServerError && error.message.includes('duplicate key')) {
-      console.log('senttttt')
       response.status(400).send('Title is already taken')
     }
-
-    if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message
-    }
-    response.status(400).send(errorMessage)
+    response.status(400).send(error)
   }
 }) as RequestHandler)
 
@@ -96,9 +72,9 @@ aboutMeRouter.delete('/:id', middleware.tokenCheck, (async (request, response) =
         fs.unlinkSync(oldPicturePath)
       } catch (error) {
         if (error && typeof error === 'object' && 'message' in error) {
-          console.error('Error deleting old picture:', error.message)
+          logger.error('Error deleting old picture:', error.message)
         } else {
-          console.error('Couldnt delete file')
+          logger.error('Couldnt delete file')
         }
       }
     }

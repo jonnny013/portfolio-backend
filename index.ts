@@ -1,5 +1,5 @@
 import app from './src/app'
-import config from './src/utils/config'
+import config from './src/config/config'
 import logger from './src/utils/logger'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call

@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import logger from './utils/logger'
-import config from './utils/config'
+import config from './config/config'
 import userRouter from './controllers/users'
 import mongoose from 'mongoose'
 import middleware from './utils/middleware'
@@ -11,7 +11,6 @@ import loginRouter from './controllers/login'
 import emailRouter from './controllers/emailContact'
 import visitorRouter from './controllers/visitor'
 import path from 'path'
-
 
 mongoose.set('strictQuery', false)
 
