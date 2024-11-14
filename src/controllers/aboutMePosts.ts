@@ -7,31 +7,24 @@ import logger from '../utils/logger'
 import fs from 'fs'
 import { MongoServerError } from 'mongodb'
 import { upload } from '../config/multer_file_config'
+import { saveToS3 } from '../config/s3_bucket'
 
 const aboutMeRouter = express.Router()
-
-interface RequestBody {
-  name: unknown
-  description: unknown
-  picDesc: unknown
-  type: unknown
-}
 
 aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async (
   request,
   response
 ) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { name, description, picDesc, type }: RequestBody = request.body
-  const data: unknown = {
-    name,
-    description,
-    picDesc,
-    type,
-    picture: request.file?.filename,
+  const { file } = request
+  if (!file) {
+    throw new Error('No file given')
   }
+  const savedItemName = await saveToS3(file, file.originalname, file.mimetype)
+  const newPost = utilCheck.parseNewAboutMeData({
+    ...request.body,
+    picture: savedItemName,
+  })
   try {
-    const newPost = utilCheck.parseNewAboutMeData(data)
     const addedPost = await aboutMeService.addAboutMePost(newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {

@@ -1,5 +1,7 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import logger from "../utils/logger"
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import logger from '../utils/logger'
+import crypto from 'crypto'
+import path from 'path'
 
 const bucketName = process.env.BUCKET_NAME as string
 const bucketRegion = process.env.BUCKET_REGION as string
@@ -14,17 +16,31 @@ const s3 = new S3Client({
   },
 })
 
-export const saveToS3 = async (file: Buffer | File, fileName: string, mimetype: string) => {
+export const randomFileName = (bytes = 10) => crypto.randomBytes(bytes).toString('hex')
+
+export const saveToS3 = async (
+  file: Express.Multer.File,
+  fileName: string,
+  mimetype: string
+) => {
   try {
+    const randomName = randomFileName()
+    const fileExtension = path.extname(fileName)
+    const fileNameWithRandom = fileName.replace(
+      fileExtension,
+      `-${randomName}${fileExtension}`
+    )
     const command = new PutObjectCommand({
       Bucket: bucketName,
-      Key: fileName,
-      Body:file,
+      Key: fileNameWithRandom,
+      Body: file.buffer,
       ContentType: mimetype,
     })
     await s3.send(command)
-    logger.info("Successfully saved to S3")
+    logger.info('Successfully saved to S3')
+    return fileNameWithRandom
   } catch (error) {
-    logger.error("Error saving to S3:", error)
+    logger.error('Error saving to S3:', error)
+    throw new Error('Error saving to S3')
   }
 }
