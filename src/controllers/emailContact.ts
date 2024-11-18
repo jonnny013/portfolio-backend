@@ -1,12 +1,12 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from "../utils/parsingUtils.ts"
 
 import emailService from "../services/emailService.ts"
+import { ContactFormParser } from "../utils/parsers.ts";
 const emailRouter = express.Router()
 
 emailRouter.post('/', (async (request, response) => {
   try {
-    const newEmail = utilCheck.parseEmail(request.body)
+    const newEmail = ContactFormParser.parse(request.body)
     const addedPost =  await emailService.addEmail({email: newEmail, request})
     return response.status(200).json(addedPost)
   } catch (error: unknown) {

@@ -1,13 +1,13 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from '../utils/parsingUtils.ts'
 import projectService from '../services/projectService.ts'
 import middleware from '../utils/middleware.ts'
 import logger from '../utils/logger.ts'
+import { OldProjectParser, ProjectParser } from '../utils/parsers.ts'
 const projectRouter = express.Router()
 
 projectRouter.post('/', middleware.tokenCheck, (async (request, response) => {
   try {
-    const newPost = utilCheck.parseNewProjectData(request.body)
+    const newPost = ProjectParser.parse(request.body)
     const addedPost = await projectService.addProject(newPost)
     response.status(201).json(addedPost)
   } catch (error: unknown) {
@@ -56,7 +56,7 @@ projectRouter.put('/:id', middleware.tokenCheck, (async (request, response) => {
   const id = request.params.id
   const post: unknown = request.body
   try {
-    const newPost = utilCheck.parseOldProjectData(post)
+    const newPost = OldProjectParser.parse(post)
     const addedPost = await projectService.editProject(newPost, id)
     return response.status(201).json(addedPost)
   } catch (error: unknown) {

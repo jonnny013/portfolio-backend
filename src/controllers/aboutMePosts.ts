@@ -1,13 +1,13 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from "../utils/parsingUtils.ts"
-import aboutMeService from "../services/aboutMeService.ts"
-import path from "node:path"
-import middleware from "../utils/middleware.ts"
-import logger from "../utils/logger.ts"
-import fs from "node:fs"
+import aboutMeService from '../services/aboutMeService.ts'
+import path from 'node:path'
+import middleware from '../utils/middleware.ts'
+import logger from '../utils/logger.ts'
+import fs from 'node:fs'
 import { MongoServerError } from 'mongodb'
-import { upload } from "../config/multer_file_config.ts"
-import { saveToS3 } from "../config/s3_bucket.ts"
+import { upload } from '../config/multer_file_config.ts'
+import { saveToS3 } from '../config/s3_bucket.ts'
+import { AboutMeParser } from '../utils/parsers.ts'
 
 const aboutMeRouter = express.Router()
 
@@ -20,7 +20,7 @@ aboutMeRouter.post('/', middleware.tokenCheck, upload.single('picture'), (async 
     throw new Error('No file given')
   }
   const savedItemName = await saveToS3(file, file.originalname, file.mimetype)
-  const newPost = utilCheck.parseNewAboutMeData({
+  const newPost = AboutMeParser.parse({
     ...request.body,
     picture: savedItemName,
   })
@@ -67,7 +67,7 @@ aboutMeRouter.delete('/:id', middleware.tokenCheck, (async (request, response) =
         if (error && typeof error === 'object' && 'message' in error) {
           logger.error('Error deleting old picture:', error.message)
         } else {
-          logger.error('Couldnt delete file')
+          logger.error("Couldn't delete file")
         }
       }
     }
@@ -95,7 +95,7 @@ aboutMeRouter.put('/:id', middleware.tokenCheck, upload.single('picture'), (asyn
         ? { picture: request.file?.filename }
         : {}),
     }
-    const newPost = utilCheck.parseOldAboutMeData(object)
+    const newPost = AboutMeParser.parse(object)
     const addedPost = await aboutMeService.editAboutMePost(newPost, id)
     if (request.file && existingPost && existingPost.picture) {
       try {
@@ -105,7 +105,7 @@ aboutMeRouter.put('/:id', middleware.tokenCheck, upload.single('picture'), (asyn
         if (error && typeof error === 'object' && 'message' in error) {
           console.error('Error deleting old picture:', error.message)
         } else {
-          console.error('Couldnt delete file')
+          console.error("Couldn't delete file")
         }
       }
     }

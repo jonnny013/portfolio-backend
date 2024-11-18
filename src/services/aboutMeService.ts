@@ -1,5 +1,5 @@
 import AboutMePost from "../models/aboutMePost.ts"
-import { NewAboutMeType, AboutMeType } from "../types.ts"
+import { NewAboutMeType, AboutMeType } from "../types.d.ts"
 
 const getAboutMePost = async () => {
   const aboutMePost = await AboutMePost.find({})

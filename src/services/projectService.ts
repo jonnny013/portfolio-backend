@@ -1,5 +1,5 @@
 import Project from "../models/project.ts"
-import { NewProject, ProjectType } from "../types.ts"
+import { NewProject, ProjectType } from "../types.d.ts"
 
 const getProject = async () => {
   const project = await Project.find({})

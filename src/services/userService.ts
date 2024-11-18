@@ -1,17 +1,22 @@
-import User from "../models/user.ts"
+import User from '../models/user.ts'
 import * as bcrypt from 'npm:bcrypt'
-import { UserType } from "../types.ts"
+import { UserType } from '../types.d.ts'
 
-const getUser = async (): Promise<Pick<UserType, "id" | "username">[]> => {
+const getUser = async (): Promise<Pick<UserType, 'id' | 'username'>[]> => {
   const user = await User.find({})
-  return user.map(({id, username}) => ({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    id ,
-    username
+  return user.map(({ id, username }) => ({
+    id,
+    username,
   }))
 }
 
-const addUser = async ({password, username}: {password: string, username: string}) => {
+const addUser = async ({
+  password,
+  username,
+}: {
+  password: string
+  username: string
+}) => {
   if (password.length < 6) {
     throw new Error('Password is too short')
   }
@@ -21,7 +26,7 @@ const addUser = async ({password, username}: {password: string, username: string
   const accountStatus = {
     active: true,
     locked: false,
-    failedLoginAttempts: 0
+    failedLoginAttempts: 0,
   }
   const loginRecord: never[] = []
 
@@ -30,10 +35,10 @@ const addUser = async ({password, username}: {password: string, username: string
     passwordHash,
     dateAdded,
     accountStatus,
-    loginRecord
+    loginRecord,
   })
-    const savedUser = await user.save()
+  const savedUser = await user.save()
   return savedUser
 }
 
-export default {getUser, addUser}
+export default { getUser, addUser }
