@@ -1,5 +1,5 @@
 import express, { RequestHandler } from 'express'
-import userService from '../services/userService'
+import userService from "../services/userService.ts"
 //import utilCheck from '../utils/parsingUtils'
 const userRouter = express.Router()
 

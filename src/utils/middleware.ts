@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
-import logger from './logger'
-import visitorInfoService from '../services/visitorInfoService'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import config from '../config/config'
+import logger from './logger.ts'
+import visitorInfoService from '../services/visitorInfoService.ts'
+import jwt from 'npm:jsonwebtoken'
+import config from '../config/config.ts'
+import process from "node:process";
 
 declare module 'express' {
   interface Request {
-    decodedToken?: string | JwtPayload
+    decodedToken?: string
   }
 }
 

@@ -1,8 +1,8 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from '../utils/parsingUtils'
-import projectService from '../services/projectService'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
+import utilCheck from '../utils/parsingUtils.ts'
+import projectService from '../services/projectService.ts'
+import middleware from '../utils/middleware.ts'
+import logger from '../utils/logger.ts'
 const projectRouter = express.Router()
 
 projectRouter.post('/', middleware.tokenCheck, (async (request, response) => {

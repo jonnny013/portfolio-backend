@@ -1,16 +1,19 @@
-import express from 'express'
-import cors from 'cors'
-import logger from './utils/logger'
-import config from './config/config'
-import userRouter from './controllers/users'
-import mongoose from 'mongoose'
-import middleware from './utils/middleware'
-import projectRouter from './controllers/projects'
-import aboutMeRouter from './controllers/aboutMePosts'
-import loginRouter from './controllers/login'
-import emailRouter from './controllers/emailContact'
-import visitorRouter from './controllers/visitor'
-import path from 'path'
+// ts-types='npm:@types/express'
+import express, { RequestHandler } from 'express'
+import cors from 'npm:cors'
+import logger from './utils/logger.ts'
+import config from './config/config.ts'
+import userRouter from './controllers/users.ts'
+import mongoose from 'npm:mongoose'
+import middleware from './utils/middleware.ts'
+import projectRouter from './controllers/projects.ts'
+import aboutMeRouter from './controllers/aboutMePosts.ts'
+import loginRouter from './controllers/login.ts'
+import emailRouter from './controllers/emailContact.ts'
+import visitorRouter from './controllers/visitor.ts'
+import path, { dirname } from 'node:path'
+
+const __dirname = dirname(new URL(import.meta.url).pathname)
 
 mongoose.set('strictQuery', false)
 
@@ -51,9 +54,9 @@ app.use('/api/login', loginRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/visitorLog', visitorRouter)
 
-app.get('*', (_req, res) => {
+app.get('*', ((_req, res) => {
   res.sendFile(path.join(staticFilesPath, 'index.html'))
-})
+}) as RequestHandler)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

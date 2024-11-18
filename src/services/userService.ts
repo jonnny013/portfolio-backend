@@ -1,6 +1,6 @@
-import User from '../models/user'
-import bcrypt from 'bcrypt'
-import { UserType } from '../types'
+import User from "../models/user.ts"
+import * as bcrypt from 'npm:bcrypt'
+import { UserType } from "../types.ts"
 
 const getUser = async (): Promise<Pick<UserType, "id" | "username">[]> => {
   const user = await User.find({})

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { GetPublicKeyOrSecret, Secret } from 'jsonwebtoken'
+import process from "node:process";
 dotenv.config()
 
 const PORT = process.env.PORT

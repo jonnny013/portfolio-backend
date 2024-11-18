@@ -1,5 +1,5 @@
-import AboutMePost from '../models/aboutMePost'
-import { NewAboutMeType, AboutMeType } from '../types'
+import AboutMePost from "../models/aboutMePost.ts"
+import { NewAboutMeType, AboutMeType } from "../types.ts"
 
 const getAboutMePost = async () => {
   const aboutMePost = await AboutMePost.find({})
@@ -13,7 +13,7 @@ const getSingleAboutMePost = async (id: string) => {
 
 const deleteAboutMePost = async (id: string) => {
   const response = await AboutMePost.findByIdAndDelete(id)
-  
+
   return response
 }
 

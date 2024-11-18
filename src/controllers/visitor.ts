@@ -1,7 +1,7 @@
 import express, { RequestHandler } from 'express'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
-import visitorInfoService from '../services/visitorInfoService'
+import middleware from "../utils/middleware.ts"
+import logger from "../utils/logger.ts"
+import visitorInfoService from "../services/visitorInfoService.ts"
 const visitorRouter = express.Router()
 
 visitorRouter.post('/', (async (request, response) => {

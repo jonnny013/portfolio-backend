@@ -1,13 +1,13 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from '../utils/parsingUtils'
-import aboutMeService from '../services/aboutMeService'
-import path from 'path'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
-import fs from 'fs'
+import utilCheck from "../utils/parsingUtils.ts"
+import aboutMeService from "../services/aboutMeService.ts"
+import path from "node:path"
+import middleware from "../utils/middleware.ts"
+import logger from "../utils/logger.ts"
+import fs from "node:fs"
 import { MongoServerError } from 'mongodb'
-import { upload } from '../config/multer_file_config'
-import { saveToS3 } from '../config/s3_bucket'
+import { upload } from "../config/multer_file_config.ts"
+import { saveToS3 } from "../config/s3_bucket.ts"
 
 const aboutMeRouter = express.Router()
 

@@ -1,6 +1,6 @@
-import EmailPost from '../models/email'
+import EmailPost from "../models/email.ts"
 import { Request } from 'express'
-import { NewEmail } from '../types'
+import { NewEmail } from "../types.ts"
 
 const addEmail = async ({email, request}: {email: NewEmail, request: Request}) => {
   const dateAdded = new Date().toString()

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Request } from 'express'
-import User, { UserDocument } from '../models/user'
+import User, { UserDocument } from "../models/user.ts"
 
 const onLoginSuccess = async (user: UserDocument, request: Request) => {
   const id = user._id

@@ -7,7 +7,7 @@ import {
   NewUser,
   ProjectType,
   Skills,
-} from '../types'
+} from "../types.ts"
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String

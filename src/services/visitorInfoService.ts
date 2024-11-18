@@ -1,6 +1,6 @@
 import { Request } from 'express'
-import VisitorRecord from '../models/visitorInfo'
-import logger from '../utils/logger'
+import VisitorRecord from "../models/visitorInfo.ts"
+import logger from "../utils/logger.ts"
 
 const getVisitor = async () => {
   const project = await VisitorRecord.find({})

@@ -1,7 +1,7 @@
 import express, { RequestHandler } from 'express'
-import utilCheck from '../utils/parsingUtils'
+import utilCheck from "../utils/parsingUtils.ts"
 
-import emailService from '../services/emailService'
+import emailService from "../services/emailService.ts"
 const emailRouter = express.Router()
 
 emailRouter.post('/', (async (request, response) => {

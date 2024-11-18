@@ -1,13 +1,14 @@
 import express, { Request, Response } from 'express'
-import User from '../models/user'
+import User from "../models/user.ts"
 const loginRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import parsingUtils from '../utils/parsingUtils'
+import parsingUtils from "../utils/parsingUtils.ts"
 import { check } from 'express-validator'
-import loginService from '../services/loginService'
+import loginService from "../services/loginService.ts"
 import dotenv from 'dotenv'
-import { UserDocument } from '../models/user'
+import { UserDocument } from "../models/user.ts"
+import process from "node:process";
 dotenv.config()
 
 loginRouter.post(

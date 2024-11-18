@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { isEmail } from 'validator'
 
 const senderInfoSchema = new mongoose.Schema(
   {
@@ -33,7 +32,6 @@ const emailSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    validate: [isEmail, 'invalid email'],
   },
   senderInfo: {
     type: [senderInfoSchema],
