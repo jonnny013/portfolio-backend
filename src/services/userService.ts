@@ -1,5 +1,5 @@
 import User from '../models/user.ts'
-import * as bcrypt from 'npm:bcrypt'
+import  bcrypt from 'npm:bcrypt'
 import { UserType } from '../types.d.ts'
 
 const getUser = async (): Promise<Pick<UserType, 'id' | 'username'>[]> => {

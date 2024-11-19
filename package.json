@@ -16,7 +16,6 @@
     "@flydotio/dockerfile": "^0.5.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
-    "@types/jest": "^29.5.11",
     "@types/jwt-simple": "^0.5.36",
     "@types/validator": "^13.11.8"
   },
