@@ -1,27 +1,21 @@
-# Based on https://github.com/denoland/deno_docker/blob/main/alpine.dockerfile
+FROM denoland/deno:2.0.6
 
-ARG DENO_VERSION=2.0.6
-ARG BIN_IMAGE=denoland/deno:bin-${DENO_VERSION}
-FROM ${BIN_IMAGE} AS bin
+# The port that your application listens to.
+EXPOSE 1993
 
-FROM frolvlad/alpine-glibc:alpine-3.13
+WORKDIR /app
 
-RUN apk --no-cache add ca-certificates
+# Create and set proper permissions for the working directory
+RUN mkdir -p /app && chown -R deno:deno /app
 
-RUN addgroup --gid 1000 deno \
-  && adduser --uid 1000 --disabled-password deno --ingroup deno \
-  && mkdir /deno-dir/ \
-  && chown deno:deno /deno-dir/
+# Switch to deno user
+USER deno
 
-ENV DENO_DIR /deno-dir/
-ENV DENO_INSTALL_ROOT /usr/local
+# Copy dependency files first
+COPY --chown=deno:deno . .
 
-ARG DENO_VERSION
-ENV DENO_VERSION=${DENO_VERSION}
-COPY --from=bin /deno /bin/deno
+# Cache the dependencies
+RUN deno cache  main.ts
 
-WORKDIR /deno-dir
-COPY . .
-
-ENTRYPOINT ["/bin/deno"]
-CMD ["run", "--allow-all", "main.ts"]
+# Run the application
+CMD ["run",  "--allow-net", "--allow-read", "--allow-env",  "main.ts"]

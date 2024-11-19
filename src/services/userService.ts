@@ -1,5 +1,5 @@
 import User from '../models/user.ts'
-import  bcrypt from 'npm:bcrypt'
+import * as bcrypt from 'https://deno.land/x/bcrypt@v0.4.1/mod.ts'
 import { UserType } from '../types.d.ts'
 
 const getUser = async (): Promise<Pick<UserType, 'id' | 'username'>[]> => {
