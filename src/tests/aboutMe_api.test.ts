@@ -8,7 +8,7 @@
 import { test, beforeEach, describe, after } from 'node:test'
 import assert from 'node:assert'
 import supertest from 'supertest'
-import mongoose from 'mongoose'
+import mongoose from 'npm:mongoose'
 import app from '../app'
 import User from '../models/user'
 import AboutMePost from '../models/aboutMePost'

@@ -1,8 +1,9 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import logger from "../utils/logger.ts"
-import crypto from "node:crypto"
-import path from "node:path"
-import process from "node:process";
+import type { Express } from 'npm:express'
+import logger from '../utils/logger.ts'
+import crypto from 'node:crypto'
+import path from 'node:path'
+import process from 'node:process'
 
 const bucketName = process.env.BUCKET_NAME as string
 const bucketRegion = process.env.BUCKET_REGION as string

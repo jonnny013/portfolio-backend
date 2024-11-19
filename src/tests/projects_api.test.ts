@@ -7,7 +7,7 @@
 // @ts-nocheck
 import { test, after, beforeEach, describe } from 'node:test'
 import assert from 'node:assert'
-import mongoose from 'mongoose'
+import mongoose from 'npm:mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import User from '../models/user'
@@ -70,7 +70,7 @@ describe('Project API', () => {
   })
 
   test('PUT /api/projects/:id updates a project with token', async () => {
-    const updatedProject = { ...returnedProject, title: 'Updated Title',}
+    const updatedProject = { ...returnedProject, title: 'Updated Title' }
     const response = await api
       .put(`/api/projects/${initialId}`)
       .set('Authorization', `Bearer ${authToken}`)

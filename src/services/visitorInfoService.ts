@@ -1,4 +1,4 @@
-import { Request } from 'express'
+import type { Request } from 'npm:express'
 import VisitorRecord from "../models/visitorInfo.ts"
 import logger from "../utils/logger.ts"
 

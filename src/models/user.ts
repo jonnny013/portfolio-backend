@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+// deno-types="npm:@types/mongoose"
+import mongoose from 'npm:mongoose'
 
 interface LoginRecord {
   ipAddress?: string
@@ -13,6 +14,7 @@ interface AccountStatus {
 }
 
 export interface UserDocument extends mongoose.Document {
+  _id: any;
   username: string
   passwordHash: string
   dateAdded: Date
@@ -22,9 +24,9 @@ export interface UserDocument extends mongoose.Document {
 
 const loginRecordSchema = new mongoose.Schema(
   {
-    time: {type: Date},
+    time: { type: Date },
     ipAddress: String,
-    device: String
+    device: String,
   },
   { _id: false, versionKey: false }
 )
@@ -33,7 +35,7 @@ const accountStatusSchema = new mongoose.Schema(
   {
     active: Boolean,
     locked: Boolean,
-    failedLoginAttempts: Number
+    failedLoginAttempts: Number,
   },
   { _id: false, versionKey: false }
 )
@@ -50,17 +52,17 @@ const userSchema = new mongoose.Schema({
     type: Date,
   },
   loginRecord: {
-    type: [loginRecordSchema]
+    type: [loginRecordSchema],
   },
   accountStatus: {
-    type: accountStatusSchema
-  }
-}) 
+    type: accountStatusSchema,
+  },
+})
 
 userSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
+  transform: (_document: unknown, returnedObject: Record<string, unknown>) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    returnedObject.id = returnedObject._id.toString()
+    returnedObject.id = returnedObject._id?.toString()
     delete returnedObject._id
     delete returnedObject.__v
     delete returnedObject.passwordHash

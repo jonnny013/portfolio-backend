@@ -1,39 +1,27 @@
-# syntax = docker/dockerfile:1
+# Based on https://github.com/denoland/deno_docker/blob/main/alpine.dockerfile
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.11.0
-FROM node:${NODE_VERSION}-slim as base
+ARG DENO_VERSION=2.0.6
+ARG BIN_IMAGE=denoland/deno:bin-${DENO_VERSION}
+FROM ${BIN_IMAGE} AS bin
 
-LABEL fly_launch_runtime="Node.js"
+FROM frolvlad/alpine-glibc:alpine-3.13
 
-# Node.js app lives here
-WORKDIR /app
+RUN apk --no-cache add ca-certificates
 
-# Set production environment
-ENV NODE_ENV="production"
+RUN addgroup --gid 1000 deno \
+  && adduser --uid 1000 --disabled-password deno --ingroup deno \
+  && mkdir /deno-dir/ \
+  && chown deno:deno /deno-dir/
 
+ENV DENO_DIR /deno-dir/
+ENV DENO_INSTALL_ROOT /usr/local
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+ARG DENO_VERSION
+ENV DENO_VERSION=${DENO_VERSION}
+COPY --from=bin /deno /bin/deno
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+WORKDIR /deno-dir
+COPY . .
 
-# Install node modules
-COPY --link package-lock.json package.json ./
-RUN npm ci
-
-# Copy application code
-COPY --link . .
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+ENTRYPOINT ["/bin/deno"]
+CMD ["run", "--allow-all", "main.ts"]

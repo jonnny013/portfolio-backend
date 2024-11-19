@@ -1,5 +1,5 @@
-// ts-types='npm:@types/express'
-import express, { RequestHandler } from 'express'
+import express from 'npm:express'
+import type { Request, Response } from 'npm:express'
 import cors from 'npm:cors'
 import logger from './utils/logger.ts'
 import config from './config/config.ts'
@@ -24,7 +24,7 @@ if (typeof config.MONGODB_URI === 'string') {
     .then(() => {
       logger.info('Connected to MongoDB')
     })
-    .catch(error => {
+    .catch((error: { message: unknown; }) => {
       if (
         error &&
         typeof error === 'object' &&
@@ -54,9 +54,9 @@ app.use('/api/login', loginRouter)
 app.use('/api/email', emailRouter)
 app.use('/api/visitorLog', visitorRouter)
 
-app.get('*', ((_req, res) => {
+app.get('*', (_req: Request, res: Response) => {
   res.sendFile(path.join(staticFilesPath, 'index.html'))
-}) as RequestHandler)
+})
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

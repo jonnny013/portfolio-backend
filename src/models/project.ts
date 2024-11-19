@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'npm:mongoose'
 
 const SkillsSchema = new mongoose.Schema(
   {
@@ -44,21 +44,21 @@ const projectSchema = new mongoose.Schema({
   },
   skills: {
     type: SkillsSchema,
-    required: true
+    required: true,
   },
   dateAdded: {
     type: Date,
   },
   recommended: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 })
 
 projectSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
+  transform: (_document: unknown, returnedObject: Record<string, unknown>) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    returnedObject.id = returnedObject._id.toString()
+    returnedObject.id = returnedObject._id?.toString()
     delete returnedObject._id
     delete returnedObject.__v
   },

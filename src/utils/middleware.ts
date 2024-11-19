@@ -1,15 +1,9 @@
-import { NextFunction, Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'npm:express'
 import logger from './logger.ts'
 import visitorInfoService from '../services/visitorInfoService.ts'
 import jwt from 'npm:jsonwebtoken'
 import config from '../config/config.ts'
 import process from "node:process";
-
-declare module 'express' {
-  interface Request {
-    decodedToken?: string
-  }
-}
 
 const tokenCheck = (req: Request, res: Response, next: NextFunction): void => {
   const authorization = req.get('authorization')

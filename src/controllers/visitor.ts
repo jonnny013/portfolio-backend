@@ -1,10 +1,11 @@
-import express, { RequestHandler } from 'express'
-import middleware from "../utils/middleware.ts"
-import logger from "../utils/logger.ts"
-import visitorInfoService from "../services/visitorInfoService.ts"
+import express from 'npm:express'
+import type { Request, Response } from 'npm:express'
+import middleware from '../utils/middleware.ts'
+import logger from '../utils/logger.ts'
+import visitorInfoService from '../services/visitorInfoService.ts'
 const visitorRouter = express.Router()
 
-visitorRouter.post('/', (async (request, response) => {
+visitorRouter.post('/', async (request: Request, response: Response) => {
   try {
     await visitorInfoService.addVisitor(request)
     response.status(201).json('Successful save')
@@ -20,20 +21,24 @@ visitorRouter.post('/', (async (request, response) => {
     }
     response.status(400).send(errorMessage)
   }
-}) as RequestHandler)
+})
 
-visitorRouter.get('/', middleware.tokenCheck, (async (_request, response) => {
-  try {
-    const user = await visitorInfoService.getVisitor()
-    if (user) {
-      response.json(user)
-    } else {
-      response.sendStatus(404)
+visitorRouter.get(
+  '/',
+  middleware.tokenCheck,
+  async (_request: Request, response: Response) => {
+    try {
+      const user = await visitorInfoService.getVisitor()
+      if (user) {
+        response.json(user)
+      } else {
+        response.sendStatus(404)
+      }
+    } catch (error) {
+      logger.error(error)
+      response.status(401).send({ error: error })
     }
-  } catch (error) {
-    logger.error(error)
-    response.status(401).send({ error: error })
   }
-}) as RequestHandler)
+)
 
 export default visitorRouter

@@ -6,7 +6,7 @@
 // @ts-nocheck
 import { test, after, beforeEach } from 'node:test'
 import assert from 'node:assert'
-import mongoose from 'mongoose'
+import mongoose from 'npm:mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import User from '../models/user'
@@ -27,7 +27,6 @@ test('can make user', async () => {
 })
 
 test('duplicate user cannot be made', async () => {
-
   const response = await api.post('/api/user').send(helper.initialUser).expect(400)
 
   assert.strictEqual(

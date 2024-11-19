@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'npm:mongoose'
 
 const aboutMeSchema = new mongoose.Schema({
   picture: {
@@ -31,9 +31,9 @@ const aboutMeSchema = new mongoose.Schema({
 })
 
 aboutMeSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
+  transform: (_document: unknown, returnedObject: Record<string, unknown>) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-    returnedObject.id = returnedObject._id.toString()
+    returnedObject.id = returnedObject._id?.toString()
     delete returnedObject._id
     delete returnedObject.__v
   },

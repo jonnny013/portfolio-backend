@@ -1,14 +1,11 @@
-import dotenv from 'dotenv'
-import { GetPublicKeyOrSecret, Secret } from 'jsonwebtoken'
-import process from "node:process";
-dotenv.config()
+import 'npm:dotenv/config'
 
-const PORT = process.env.PORT
+const PORT = Deno.env.get('PORT')
 const MONGODB_URI =
-  process.env.NODE_ENV === 'test'
-    ? process.env.MONGODB_URI_TESTING
-    : process.env.MONGODB_URI
+  Deno.env.get('NODE_ENV') === 'test'
+    ? Deno.env.get('MONGODB_URI_TESTING')
+    : Deno.env.get('MONGODB_URI')
 
-const SECRET: Secret | GetPublicKeyOrSecret | undefined = process.env.SECRET
+const SECRET: string | undefined = Deno.env.get('SECRET')
 
 export default { PORT, MONGODB_URI, SECRET }

@@ -1,10 +1,11 @@
-import express, { RequestHandler } from 'express'
-
+// deno-types="npm:@types/express"
+import express from 'npm:express'
+import type { Request, Response } from 'npm:express'
 import emailService from "../services/emailService.ts"
 import { ContactFormParser } from "../utils/parsers.ts";
 const emailRouter = express.Router()
 
-emailRouter.post('/', (async (request, response) => {
+emailRouter.post('/', (async (request: Request, response: Response) => {
   try {
     const newEmail = ContactFormParser.parse(request.body)
     const addedPost =  await emailService.addEmail({email: newEmail, request})
@@ -21,6 +22,6 @@ emailRouter.post('/', (async (request, response) => {
     }
     return response.status(400).send(errorMessage)
   }
-}) as RequestHandler)
+}))
 
 export default emailRouter

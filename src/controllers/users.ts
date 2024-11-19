@@ -1,5 +1,6 @@
-import express, { RequestHandler } from 'express'
-import userService from "../services/userService.ts"
+import express from 'npm:express'
+import type { Request, Response } from 'npm:express'
+import userService from '../services/userService.ts'
 //import utilCheck from '../utils/parsingUtils'
 const userRouter = express.Router()
 
@@ -22,13 +23,13 @@ const userRouter = express.Router()
 //   }
 // }) as RequestHandler)
 
-userRouter.get('/', (async (_request, response) => {
+userRouter.get('/', async (_request: Request, response: Response) => {
   const user = await userService.getUser()
   if (user) {
     response.json(user)
   } else {
     response.sendStatus(404)
   }
-}) as RequestHandler)
+})
 
 export default userRouter
