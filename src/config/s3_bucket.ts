@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import type { Express } from 'npm:express'
 import logger from '../utils/logger.ts'
 import crypto from 'node:crypto'
@@ -45,4 +45,23 @@ export const saveToS3 = async (
     logger.error('Error saving to S3:', error)
     throw new Error('Error saving to S3')
   }
+}
+
+export const deleteFromS3 = async (fileName: string) => {
+  try {
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+    }
+    const command = new DeleteObjectCommand(params)
+    await s3.send(command)
+    logger.info('Successfully deleted from S3')
+  } catch (error) {
+    logger.error('Error deleting from S3:', error)
+    throw new Error('Error deleting from S3')
+  }
+}
+
+export const getImageFromS3 =  (fileName: string) => {
+  return `https://d2tgooe9ddez9l.cloudfront.net/${fileName}`
 }

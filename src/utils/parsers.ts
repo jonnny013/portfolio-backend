@@ -47,7 +47,7 @@ export const NewUserParser = z.object({
 })
 
 export const AboutMeParser = z.object({
-  picture: z.string(),
+  picture: z.string().optional(),
   name: z.string(),
   description: z.string(),
   picDesc: z.string(),

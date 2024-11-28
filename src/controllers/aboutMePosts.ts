@@ -1,4 +1,3 @@
-
 import express from 'npm:express'
 import type { Request, Response } from 'npm:express'
 import aboutMeService from '../services/aboutMeService.ts'
@@ -8,7 +7,7 @@ import logger from '../utils/logger.ts'
 import fs from 'node:fs'
 import { MongoServerError } from 'npm:mongodb'
 import { upload } from '../config/multer_file_config.ts'
-import { saveToS3 } from '../config/s3_bucket.ts'
+import { deleteFromS3, saveToS3 } from '../config/s3_bucket.ts'
 import { AboutMeParser } from '../utils/parsers.ts'
 
 const aboutMeRouter = express.Router()
@@ -63,21 +62,8 @@ aboutMeRouter.delete(
   middleware.tokenCheck,
   async (request: Request, response: Response) => {
     try {
-      const existingPost = await aboutMeService.getSingleAboutMePost(request.params.id)
-
       await aboutMeService.deleteAboutMePost(request.params.id)
-      if (request.file && existingPost && existingPost.picture) {
-        try {
-          const oldPicturePath = path.join('./public/images', existingPost.picture)
-          fs.unlinkSync(oldPicturePath)
-        } catch (error) {
-          if (error && typeof error === 'object' && 'message' in error) {
-            logger.error('Error deleting old picture:', error.message)
-          } else {
-            logger.error("Couldn't delete file")
-          }
-        }
-      }
+
       response.status(200).json({ message: 'Successful deletion' })
     } catch (error) {
       logger.error(error)
@@ -95,8 +81,6 @@ aboutMeRouter.put(
     const post: unknown = request.body
     console.log('router post: ', post)
     try {
-      const existingPost = await aboutMeService.getSingleAboutMePost(id)
-
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const object = {
         ...(typeof post === 'object' ? post : { post }),
@@ -104,21 +88,11 @@ aboutMeRouter.put(
           ? { picture: request.file?.filename }
           : {}),
       }
-      const newPost = AboutMeParser.parse(object)
-      const addedPost = await aboutMeService.editAboutMePost(newPost, id)
-      if (request.file && existingPost && existingPost.picture) {
-        try {
-          const oldPicturePath = path.join('./public/images', existingPost.picture)
-          fs.unlinkSync(oldPicturePath)
-        } catch (error) {
-          if (error && typeof error === 'object' && 'message' in error) {
-            console.error('Error deleting old picture:', error.message)
-          } else {
-            console.error("Couldn't delete file")
-          }
-        }
-      }
-      response.status(201).json(addedPost)
+
+      const updatedPost = AboutMeParser.parse(object)
+      const changedPost = await aboutMeService.editAboutMePost(updatedPost, id, request.file)
+
+      response.status(201).json(changedPost)
     } catch (error: unknown) {
       let errorMessage = 'Something went wrong.'
       logger.error(error)
