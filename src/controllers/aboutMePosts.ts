@@ -1,13 +1,11 @@
 import express from 'npm:express'
 import type { Request, Response } from 'npm:express'
 import aboutMeService from '../services/aboutMeService.ts'
-import path from 'node:path'
 import middleware from '../utils/middleware.ts'
 import logger from '../utils/logger.ts'
-import fs from 'node:fs'
 import { MongoServerError } from 'npm:mongodb'
 import { upload } from '../config/multer_file_config.ts'
-import { deleteFromS3, saveToS3 } from '../config/s3_bucket.ts'
+import {  saveToS3 } from '../config/s3_bucket.ts'
 import { AboutMeParser } from '../utils/parsers.ts'
 
 const aboutMeRouter = express.Router()
