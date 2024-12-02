@@ -1,4 +1,5 @@
 import express from 'npm:express'
+import 'npm:express-async-errors'
 import type { Request, Response } from 'npm:express'
 import cors from 'npm:cors'
 import logger from './utils/logger.ts'

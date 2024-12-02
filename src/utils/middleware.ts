@@ -3,7 +3,7 @@ import logger from './logger.ts'
 import visitorInfoService from '../services/visitorInfoService.ts'
 import jwt from 'npm:jsonwebtoken'
 import config from '../config/config.ts'
-import process from "node:process";
+import process from 'node:process'
 
 const tokenCheck = (req: Request, res: Response, next: NextFunction): void => {
   const authorization = req.get('authorization')
@@ -62,8 +62,10 @@ const errorHandler = (
   response: Response,
   next: NextFunction
 ) => {
-  logger.error(error.message)
-
+  logger.error('Error --->', error.name, '\n', error.message)
+  if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+    response.status(400).send('Title is already taken')
+  }
   if (error.name === 'CastError' && error instanceof Error) {
     response.status(400).send({ error: 'malformatted id' })
     return
@@ -75,6 +77,15 @@ const errorHandler = (
       error: 'token expired',
     })
     return
+  } else if (error.name === 'ZodError') {
+    if (typeof error.message === 'string') {
+      const errorMessage = JSON.parse(error.message)
+      response.status(400).json({
+        error: `${errorMessage[0].path[0]}: ${errorMessage[0].message}`,
+      })
+    } else {
+      response.status(400).json({ error: error.message })
+    }
   }
 
   return next(error)

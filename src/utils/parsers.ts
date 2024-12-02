@@ -5,7 +5,10 @@ export const ProjectParser = z.object({
   project: z.string().min(5),
   description: z.string().min(5),
   website: z.string().min(5),
-  sourceCode: z.string().optional(),
+  sourceCode: z
+    .string()
+    .transform(value => (value === '' ? undefined : value))
+    .optional(),
   skills: z.object({
     css: z.boolean().optional(),
     html: z.boolean().optional(),
@@ -54,4 +57,3 @@ export const AboutMeParser = z.object({
   type: z.enum(['Certificate', 'Personal', 'Experience']),
   dateAdded: z.string().optional(),
 })
-

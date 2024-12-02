@@ -10,22 +10,9 @@ projectRouter.post(
   '/',
   middleware.tokenCheck,
   async (request: Request, response: Response) => {
-    try {
-      const newPost = ProjectParser.parse(request.body)
-      const addedPost = await projectService.addProject(newPost)
-      response.status(201).json(addedPost)
-    } catch (error: unknown) {
-      logger.error(error)
-      let errorMessage = 'Something went wrong.'
-      if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
-        response.status(400).send('Title is already taken')
-      }
-
-      if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message
-      }
-      response.status(400).send(errorMessage)
-    }
+    const newPost = ProjectParser.parse(request.body)
+    const addedPost = await projectService.addProject(newPost)
+    response.status(201).json(addedPost)
   }
 )
 
