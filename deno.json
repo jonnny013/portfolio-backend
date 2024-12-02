@@ -1,6 +1,10 @@
 {
   "tasks": {
-    "dev": "NODE_ENV=development deno run --watch --allow-read --allow-env --allow-ffi --allow-sys --allow-net main.ts"
+    "dev": "NODE_ENV=development deno run --watch --allow-read --allow-env --allow-ffi --allow-sys --allow-net main.ts",
+    "proxy": "",
+    "psql": "fly postgres connect -a jon-love-portfolio-db",
+    "migrations": "npx sequelize-cli db:migrate ",
+    "newmigration": "npx sequelize-cli migration:generate --name"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"

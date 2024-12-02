@@ -1,5 +1,5 @@
 import type { Request } from 'npm:express'
-import VisitorRecord from "../models/visitorInfo.ts"
+import VisitorRecord from "../modelsMongoose/visitorInfo.ts"
 import logger from "../utils/logger.ts"
 
 const getVisitor = async () => {

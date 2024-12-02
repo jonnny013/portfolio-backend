@@ -77,6 +77,8 @@ const errorHandler = (
       error: 'token expired',
     })
     return
+  } else if (error.message === 'DATABASE_URL is not set') {
+    response.status(500).json({ error: 'DATABASE_URL is not set' })
   } else if (error.name === 'ZodError') {
     if (typeof error.message === 'string') {
       const errorMessage = JSON.parse(error.message)

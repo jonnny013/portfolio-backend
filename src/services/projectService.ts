@@ -1,4 +1,4 @@
-import Project from "../models/project.ts"
+import Project from "../modelsMongoose/project.ts"
 import { NewProject, ProjectType } from "../types.d.ts"
 
 const getProject = async () => {

@@ -1,4 +1,4 @@
-import EmailPost from "../models/email.ts"
+import EmailPost from "../modelsMongoose/email.ts"
 import type { Request } from 'npm:express'
 import { NewEmail } from "../types.d.ts"
 

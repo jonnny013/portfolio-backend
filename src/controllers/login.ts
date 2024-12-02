@@ -1,13 +1,13 @@
 import express from 'npm:express'
 import type { Request, Response } from 'npm:express'
-import User from '../models/user.ts'
+import User from '../modelsMongoose/user.ts'
 const loginRouter = express.Router()
 import jwt from 'npm:jsonwebtoken'
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts"
 import { check } from 'npm:express-validator'
 import loginService from '../services/loginService.ts'
 import dotenv from 'npm:dotenv'
-import { UserDocument } from '../models/user.ts'
+import { UserDocument } from '../modelsMongoose/user.ts'
 import process from 'node:process'
 import { LoginParser } from '../utils/parsers.ts'
 dotenv.config()

@@ -1,5 +1,5 @@
 import { deleteFromS3, getImageFromS3, saveToS3 } from '../config/s3_bucket.ts'
-import AboutMePost from '../models/aboutMePost.ts'
+import AboutMePost from '../modelsMongoose/aboutMePost.ts'
 import { NewAboutMeType, AboutMeType } from '../types.d.ts'
 import type { Express } from 'npm:express'
 

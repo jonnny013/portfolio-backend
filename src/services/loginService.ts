@@ -1,5 +1,5 @@
 import type { Request } from 'npm:express'
-import User, { UserDocument } from "../models/user.ts"
+import User, { UserDocument } from "../modelsMongoose/user.ts"
 
 const onLoginSuccess = async (user: UserDocument, request: Request) => {
   const id = user._id
