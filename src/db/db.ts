@@ -6,7 +6,7 @@ const databaseUrl = Deno.env.get('DATABASE_URL')
 if (!databaseUrl) {
   throw new Error('DATABASE_URL is not set')
 }
-const sequelize = new Sequelize(databaseUrl)
+export const sequelize = new Sequelize(databaseUrl)
 
 export const connectToDatabase = async () => {
   try {

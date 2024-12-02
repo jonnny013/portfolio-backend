@@ -1,9 +1,9 @@
 {
   "tasks": {
     "dev": "NODE_ENV=development deno run --watch --allow-read --allow-env --allow-ffi --allow-sys --allow-net main.ts",
-    "proxy": "",
+    "proxy": "fly proxy 5432 -a jon-love-portfolio-db",
     "psql": "fly postgres connect -a jon-love-portfolio-db",
-    "migrations": "npx sequelize-cli db:migrate ",
+    "migrations": "NODE_OPTIONS='--require ts-node/register' npx sequelize-cli db:migrate --config src/db/db.ts ",
     "newmigration": "npx sequelize-cli migration:generate --name"
   },
   "imports": {
