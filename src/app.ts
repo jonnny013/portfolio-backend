@@ -12,10 +12,10 @@ import aboutMeRouter from './controllers/aboutMePosts.ts'
 import loginRouter from './controllers/login.ts'
 import emailRouter from './controllers/emailContact.ts'
 import visitorRouter from './controllers/visitor.ts'
-import path, { dirname } from 'node:path'
+import path from 'node:path'
 
-const __dirname = dirname(new URL(import.meta.url).pathname)
-
+//const __dirname = dirname(new URL(import.meta.url).pathname)
+const __dirname = import.meta.dirname as string
 mongoose.set('strictQuery', false)
 
 if (typeof config.MONGODB_URI === 'string') {
@@ -25,7 +25,7 @@ if (typeof config.MONGODB_URI === 'string') {
     .then(() => {
       logger.info('Connected to MongoDB')
     })
-    .catch((error: { message: unknown; }) => {
+    .catch((error: { message: unknown }) => {
       if (
         error &&
         typeof error === 'object' &&
@@ -37,8 +37,7 @@ if (typeof config.MONGODB_URI === 'string') {
     })
 }
 
-const staticFilesPath = path.join(__dirname, '../../dist')
-console.log(staticFilesPath)
+const staticFilesPath = path.join(__dirname, '../dist')
 
 const app = express()
 app.use(express.json())
