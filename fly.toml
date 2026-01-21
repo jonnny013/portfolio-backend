@@ -11,8 +11,8 @@ primary_region = "nrt"
 [env]
   PORT = "3001" # add this
 
-  [processes]
-  app = 'run --allow-all ./main.ts'
+[processes]
+  app = "node build/main.js"
 
 [http_service]
   internal_port = 3001

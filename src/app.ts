@@ -43,7 +43,10 @@ if (typeof config.MONGODB_URI === 'string') {
     })
 }
 
-const staticFilesPath = path.join(__dirname, '../dist')
+const staticFilesPath = path.join(
+  __dirname,
+  process.env.NODE_ENV === 'development' ? '../dist' : '../../dist',
+)
 
 const app = express()
 app.use(express.json())

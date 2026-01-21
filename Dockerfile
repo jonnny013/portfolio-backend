@@ -22,6 +22,7 @@ WORKDIR /app
 
 # Copy only what we need from the builder
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
 
 # Install only production deps (if any)
