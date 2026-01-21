@@ -1,21 +1,32 @@
-FROM denoland/deno:2.0.6
-
-# The port that your application listens to.
-EXPOSE 1993
+# ---- Build stage ----
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Create and set proper permissions for the working directory
-RUN mkdir -p /app && chown -R deno:deno /app
+# Copy dependency files first (better caching)
+COPY package*.json ./
+RUN npm ci
 
-# Switch to deno user
-USER deno
+# Copy the rest of the source
+COPY . .
 
-# Copy dependency files first
-COPY --chown=deno:deno . .
+# Build the app
+RUN npm run build
+# expects output: /app/build/main.js
 
-# Cache the dependencies
-RUN deno cache  main.ts
 
-# Run the application
-CMD ["run",  "--allow-net", "--allow-read", "--allow-env",  "main.ts"]
+# ---- Runtime stage ----
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy only what we need from the builder
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/package*.json ./
+
+# Install only production deps (if any)
+RUN npm ci --omit=dev
+
+EXPOSE 3001
+
+CMD ["node", "build/main.js"]
