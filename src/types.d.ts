@@ -1,5 +1,5 @@
-import z from 'npm:zod'
-import { AboutMeParser, ContactFormParser, ProjectParser } from './utils/parsers.ts'
+import z from 'zod'
+import { AboutMeParser, ContactFormParser, ProjectParser } from './utils/parsers'
 
 export type ProjectType = z.infer<typeof ProjectParser>
 

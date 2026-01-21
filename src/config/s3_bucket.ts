@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
-import type { Express } from 'npm:express'
-import logger from '../utils/logger.ts'
+import type { Express } from 'express'
+import logger from '../utils/logger'
 import crypto from 'node:crypto'
 import path from 'node:path'
 import process from 'node:process'
@@ -23,14 +23,14 @@ export const randomFileName = (bytes = 10) => crypto.randomBytes(bytes).toString
 export const saveToS3 = async (
   file: Express.Multer.File,
   fileName: string,
-  mimetype: string
+  mimetype: string,
 ) => {
   try {
     const randomName = randomFileName()
     const fileExtension = path.extname(fileName)
     const fileNameWithRandom = fileName.replace(
       fileExtension,
-      `-${randomName}${fileExtension}`
+      `-${randomName}${fileExtension}`,
     )
     const command = new PutObjectCommand({
       Bucket: bucketName,
@@ -62,6 +62,6 @@ export const deleteFromS3 = async (fileName: string) => {
   }
 }
 
-export const getImageFromS3 =  (fileName: string) => {
+export const getImageFromS3 = (fileName: string) => {
   return `https://d2tgooe9ddez9l.cloudfront.net/${fileName}`
 }

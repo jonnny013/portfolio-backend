@@ -1,5 +1,5 @@
-import { DataTypes, Model, InferAttributes, InferCreationAttributes, literal } from 'npm:sequelize'
-import { sequelize } from '../db/db.ts'
+import { DataTypes, Model, InferAttributes, InferCreationAttributes, literal } from 'sequelize'
+import { sequelize } from '../db/db'
 
 class User extends Model<
   InferAttributes<User>,

@@ -1,21 +1,27 @@
-import express from 'npm:express'
-import 'npm:express-async-errors'
-import type { Request, Response } from 'npm:express'
-import cors from 'npm:cors'
-import logger from './utils/logger.ts'
-import config from './config/config.ts'
-import userRouter from './controllers/users.ts'
-import mongoose from 'npm:mongoose'
-import middleware from './utils/middleware.ts'
-import projectRouter from './controllers/projects.ts'
-import aboutMeRouter from './controllers/aboutMePosts.ts'
-import loginRouter from './controllers/login.ts'
-import emailRouter from './controllers/emailContact.ts'
-import visitorRouter from './controllers/visitor.ts'
+import express from 'express'
+import 'express-async-errors'
+import type { Request, Response } from 'express'
+import cors from 'cors'
+import logger from './utils/logger'
+import config from './config/config'
+import userRouter from './controllers/users'
+import mongoose from 'mongoose'
+import middleware from './utils/middleware'
+import projectRouter from './controllers/projects'
+import aboutMeRouter from './controllers/aboutMePosts'
+import loginRouter from './controllers/login'
+import emailRouter from './controllers/emailContact'
+import visitorRouter from './controllers/visitor'
 import path from 'node:path'
 
 //const __dirname = dirname(new URL(import.meta.url).pathname)
-const __dirname = import.meta.dirname as string
+import { fileURLToPath } from 'node:url'
+let __dirname: string
+try {
+  __dirname = path.dirname(fileURLToPath(import.meta.url))
+} catch {
+  __dirname = process.cwd()
+}
 mongoose.set('strictQuery', false)
 
 if (typeof config.MONGODB_URI === 'string') {

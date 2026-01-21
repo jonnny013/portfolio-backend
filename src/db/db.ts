@@ -1,8 +1,8 @@
-import { Sequelize } from 'npm:sequelize'
-import logger from '../utils/logger.ts'
+import { Sequelize } from 'sequelize'
+import logger from '../utils/logger'
 import process from 'node:process'
 
-const databaseUrl = Deno.env.get('DATABASE_URL')
+const databaseUrl = process.env.DATABASE_URL
 if (!databaseUrl) {
   throw new Error('DATABASE_URL is not set')
 }

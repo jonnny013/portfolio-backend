@@ -1,4 +1,4 @@
-import mongoose from 'npm:mongoose'
+import mongoose from 'mongoose'
 
 const aboutMeSchema = new mongoose.Schema({
   picture: {

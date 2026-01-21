@@ -7,7 +7,7 @@
 // @ts-nocheck
 import { test, after, beforeEach, describe } from 'node:test'
 import assert from 'node:assert'
-import mongoose from 'npm:mongoose'
+import mongoose from 'mongoose'
 import supertest from 'supertest'
 import app from '../app'
 import User from '../models/user'

@@ -1,9 +1,9 @@
-import express from 'npm:express'
-import type { Request, Response } from 'npm:express'
-import projectService from '../services/projectService.ts'
-import middleware from '../utils/middleware.ts'
-import logger from '../utils/logger.ts'
-import { OldProjectParser, ProjectParser } from '../utils/parsers.ts'
+import express from 'express'
+import type { Request, Response } from 'express'
+import projectService from '../services/projectService'
+import middleware from '../utils/middleware'
+import logger from '../utils/logger'
+import { OldProjectParser, ProjectParser } from '../utils/parsers'
 const projectRouter = express.Router()
 
 projectRouter.post(

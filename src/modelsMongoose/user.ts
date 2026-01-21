@@ -1,5 +1,5 @@
 // deno-types="npm:@types/mongoose"
-import mongoose from 'npm:mongoose'
+import mongoose from 'mongoose'
 
 interface LoginRecord {
   ipAddress?: string

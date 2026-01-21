@@ -1,6 +1,6 @@
-import EmailPost from "../modelsMongoose/email.ts"
-import type { Request } from 'npm:express'
-import { NewEmail } from "../types.d.ts"
+import EmailPost from "../modelsMongoose/email"
+import type { Request } from 'express'
+import { NewEmail } from "../types"
 
 const addEmail = async ({email, request}: {email: NewEmail, request: Request}) => {
   const dateAdded = new Date().toString()

@@ -1,8 +1,8 @@
 // deno-types="npm:@types/express"
-import express from 'npm:express'
-import type { Request, Response } from 'npm:express'
-import emailService from "../services/emailService.ts"
-import { ContactFormParser } from "../utils/parsers.ts";
+import express from 'express'
+import type { Request, Response } from 'express'
+import emailService from "../services/emailService"
+import { ContactFormParser } from "../utils/parsers";
 const emailRouter = express.Router()
 
 emailRouter.post('/', (async (request: Request, response: Response) => {

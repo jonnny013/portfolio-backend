@@ -1,6 +1,6 @@
-import User from '../modelsMongoose/user.ts'
-import * as bcrypt from 'https://deno.land/x/bcrypt@v0.4.1/mod.ts'
-import { UserType } from '../types.d.ts'
+import User from '../modelsMongoose/user'
+import * as bcrypt from 'bcrypt'
+import { UserType } from '../types'
 
 const getUser = async (): Promise<Pick<UserType, 'id' | 'username'>[]> => {
   const user = await User.find({})

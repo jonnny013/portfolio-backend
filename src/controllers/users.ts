@@ -1,6 +1,6 @@
-import express from 'npm:express'
-import type { Request, Response } from 'npm:express'
-import userService from '../services/userService.ts'
+import express from 'express'
+import type { Request, Response } from 'express'
+import userService from '../services/userService'
 //import utilCheck from '../utils/parsingUtils'
 const userRouter = express.Router()
 

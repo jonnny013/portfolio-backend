@@ -1,5 +1,5 @@
-import Project from "../modelsMongoose/project.ts"
-import { NewProject, ProjectType } from "../types.d.ts"
+import Project from "../modelsMongoose/project"
+import { NewProject, ProjectType } from "../types"
 
 const getProject = async () => {
   const project = await Project.find({})

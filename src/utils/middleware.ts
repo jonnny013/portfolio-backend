@@ -1,8 +1,8 @@
-import type { NextFunction, Request, Response } from 'npm:express'
-import logger from './logger.ts'
-import visitorInfoService from '../services/visitorInfoService.ts'
-import jwt from 'npm:jsonwebtoken'
-import config from '../config/config.ts'
+import type { NextFunction, Request, Response } from 'express'
+import logger from './logger'
+import visitorInfoService from '../services/visitorInfoService'
+import jwt from 'jsonwebtoken'
+import config from '../config/config'
 import process from 'node:process'
 
 const tokenCheck = (req: Request, res: Response, next: NextFunction): void => {
@@ -47,7 +47,7 @@ const requestLogger = (request: Request, response: Response, next: NextFunction)
       .split(',')[0]
       .trim(),
     'user agent: ',
-    request.get('User-Agent')
+    request.get('User-Agent'),
   )
   next()
 }
@@ -60,7 +60,7 @@ const errorHandler = (
   error: { message: unknown; name: string },
   _request: Request,
   response: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   logger.error('Error --->', error.name, '\n', error.message)
   if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {

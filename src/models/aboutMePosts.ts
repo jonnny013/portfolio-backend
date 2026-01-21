@@ -4,8 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   literal,
-} from 'npm:sequelize'
-import { sequelize } from '../db/db.ts'
+} from 'sequelize'
+import { sequelize } from '../db/db'
 
 class AboutMePost extends Model<
   InferAttributes<AboutMePost>,

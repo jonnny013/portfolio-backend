@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "backend for portfolio",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development ts-node-dev index.ts",
-    "start": "NODE_ENV=production node build/index.js",
+    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only main.ts",
+    "start": "NODE_ENV=production node build/main.js",
+    "build": "tsc -p tsconfig.json",
+    "migrate": "NODE_OPTIONS='--require ts-node/register' npx sequelize-cli db:migrate --config sequelize.config.cjs",
     "build:ui": "rm -rf dist && cd ../portfolio/ && npm run build && cp -r dist ../portfolio-backend",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy"

@@ -1,11 +1,11 @@
-import 'npm:dotenv/config'
+import 'dotenv/config'
 
-const PORT = Deno.env.get('PORT')
+const PORT = Number(process.env.PORT) || 3001
 const MONGODB_URI =
-  Deno.env.get('NODE_ENV') === 'test'
-    ? Deno.env.get('MONGODB_URI_TESTING')
-    : Deno.env.get('MONGODB_URI')
+  process.env.NODE_ENV === 'test'
+    ? process.env.MONGODB_URI_TESTING
+    : process.env.MONGODB_URI
 
-const SECRET: string | undefined = Deno.env.get('SECRET')
+const SECRET: string | undefined = process.env.SECRET
 
 export default { PORT, MONGODB_URI, SECRET }
