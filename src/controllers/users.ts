@@ -32,4 +32,19 @@ userRouter.get('/', async (_request: Request, response: Response) => {
   }
 })
 
+userRouter.post('/:id/reset_pass', async (request: Request, response: Response) => {
+  const pass = request.body.password
+  const originalPass = request.body.originalPassword
+  const userId = request.params.id
+
+  try {
+    await userService.updatePassword(pass, userId, originalPass)
+    response.status(200).json({ message: 'ok' })
+  } catch (err) {
+    response
+      .status(400)
+      .json({ message: 'unable to update password', error: err.message })
+  }
+})
+
 export default userRouter

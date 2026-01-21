@@ -21,8 +21,8 @@ const addUser = async ({
     throw new Error('Password is too short')
   }
   const dateAdded = new Date().toString()
-  const saltRounds = 10
-  const passwordHash = await bcrypt.hash(password, saltRounds)
+
+  const passwordHash = await bcrypt.hash(password)
   const accountStatus = {
     active: true,
     locked: false,
@@ -41,4 +41,21 @@ const addUser = async ({
   return savedUser
 }
 
-export default { getUser, addUser }
+const updatePassword = async (password: string, userId: string, originalPass: string) => {
+  const passwordHash = await bcrypt.hash(password)
+
+  const user = await User.findById(userId)
+
+  if (!user) throw new Error('no user found')
+
+  const ok = await bcrypt.compare(originalPass, user.passwordHash)
+
+  if (!ok) throw new Error('bad password')
+
+  user.passwordHash = passwordHash
+  await user.save()
+
+  return true
+}
+
+export default { getUser, addUser, updatePassword }
