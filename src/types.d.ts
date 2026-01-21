@@ -1,5 +1,11 @@
 import z from 'zod'
-import { AboutMeParser, ContactFormParser, ProjectParser } from './utils/parsers'
+import { AboutMeParser, ContactFormParser, ProjectParser } from './utils/parsers.js'
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    decodedToken: jwt.JwtPayload | string
+  }
+}
 
 export type ProjectType = z.infer<typeof ProjectParser>
 

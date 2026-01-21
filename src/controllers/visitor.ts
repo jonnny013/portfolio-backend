@@ -1,8 +1,8 @@
 import express from 'express'
 import type { Request, Response } from 'express'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
-import visitorInfoService from '../services/visitorInfoService'
+import middleware from '../utils/middleware.js'
+import logger from '../utils/logger.js'
+import visitorInfoService from '../services/visitorInfoService.js'
 const visitorRouter = express.Router()
 
 visitorRouter.post('/', async (request: Request, response: Response) => {

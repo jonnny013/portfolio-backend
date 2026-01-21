@@ -1,8 +1,8 @@
-import EmailPost from "../modelsMongoose/email"
+import EmailPost from '../modelsMongoose/email.js'
 import type { Request } from 'express'
-import { NewEmail } from "../types"
+import { NewEmail } from '../types.js'
 
-const addEmail = async ({email, request}: {email: NewEmail, request: Request}) => {
+const addEmail = async ({ email, request }: { email: NewEmail; request: Request }) => {
   const dateAdded = new Date().toString()
   const time = new Date().toString()
   const ipAddress = request.ip as string
@@ -16,7 +16,7 @@ const addEmail = async ({email, request}: {email: NewEmail, request: Request}) =
   const emailPost = new EmailPost({
     ...email,
     dateAdded,
-    senderInfo: newRecord
+    senderInfo: newRecord,
   })
   const savedAboutMePost = await emailPost.save()
   return savedAboutMePost

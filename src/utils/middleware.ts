@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express'
-import logger from './logger'
-import visitorInfoService from '../services/visitorInfoService'
+import logger from './logger.js'
+import visitorInfoService from '../services/visitorInfoService.js'
 import jwt from 'jsonwebtoken'
-import config from '../config/config'
+import config from '../config/config.js'
 import process from 'node:process'
 
 const tokenCheck = (req: Request, res: Response, next: NextFunction): void => {

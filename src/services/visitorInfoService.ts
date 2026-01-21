@@ -1,6 +1,6 @@
 import type { Request } from 'express'
-import VisitorRecord from "../modelsMongoose/visitorInfo"
-import logger from "../utils/logger"
+import VisitorRecord from '../modelsMongoose/visitorInfo.js'
+import logger from '../utils/logger.js'
 
 const getVisitor = async () => {
   const project = await VisitorRecord.find({})

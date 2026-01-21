@@ -1,6 +1,8 @@
-import User from '../modelsMongoose/user'
+import User from '../modelsMongoose/user.js'
 import * as bcrypt from 'bcrypt'
-import { UserType } from '../types'
+import { UserType } from '../types.js'
+
+const saltRounds = 10
 
 const getUser = async (): Promise<Pick<UserType, 'id' | 'username'>[]> => {
   const user = await User.find({})
@@ -22,7 +24,7 @@ const addUser = async ({
   }
   const dateAdded = new Date().toString()
 
-  const passwordHash = await bcrypt.hash(password)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
   const accountStatus = {
     active: true,
     locked: false,
@@ -42,7 +44,7 @@ const addUser = async ({
 }
 
 const updatePassword = async (password: string, userId: string, originalPass: string) => {
-  const passwordHash = await bcrypt.hash(password)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = await User.findById(userId)
 

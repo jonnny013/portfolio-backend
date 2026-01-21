@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   literal,
 } from 'sequelize'
-import { sequelize } from '../db/db'
+import { sequelize } from '../db/db.js'
 
 class AboutMePost extends Model<
   InferAttributes<AboutMePost>,
@@ -70,6 +70,6 @@ AboutMePost.init(
     tableName: 'about_me_posts',
     underscored: true,
     timestamps: true,
-  }
+  },
 )
 export default AboutMePost

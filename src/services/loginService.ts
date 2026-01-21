@@ -1,5 +1,5 @@
 import type { Request } from 'express'
-import User, { UserDocument } from "../modelsMongoose/user"
+import User, { UserDocument } from '../modelsMongoose/user.js'
 
 const onLoginSuccess = async (user: UserDocument, request: Request) => {
   const id = user._id
@@ -18,7 +18,7 @@ const onLoginSuccess = async (user: UserDocument, request: Request) => {
       $push: { loginRecord: newRecord },
       $set: { 'accountStatus.failedLoginAttempts': 0 },
     },
-    { new: true }
+    { new: true },
   )
   return 'success'
 }
@@ -47,7 +47,7 @@ const onFailedLogin = async (user: UserDocument, request: Request) => {
         $push: { loginRecord: newRecord },
         $set: { 'accountStatus.locked': true },
       },
-      { new: true }
+      { new: true },
     )
   } else {
     await User.findByIdAndUpdate(
@@ -56,7 +56,7 @@ const onFailedLogin = async (user: UserDocument, request: Request) => {
         $push: { loginRecord: newRecord },
         $inc: { 'accountStatus.failedLoginAttempts': 1 },
       },
-      { new: true }
+      { new: true },
     )
   }
   return 'success'

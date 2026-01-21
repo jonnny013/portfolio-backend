@@ -9,12 +9,12 @@ import { test, after, beforeEach, describe } from 'node:test'
 import assert from 'node:assert'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
-import app from '../app'
-import User from '../models/user'
-import Project from '../models/project'
+import app from '../app.js'
+import User from '../models/user.js'
+import Project from '../models/project.js'
 const api = supertest(app)
 
-import helper from './test_helper'
+import helper from './test_helper.js'
 
 let authToken
 let initialId

@@ -1,15 +1,15 @@
 import express from 'express'
 import type { Request, Response } from 'express'
-import User from '../modelsMongoose/user'
+import User from '../modelsMongoose/user.js'
 const loginRouter = express.Router()
 import jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import { check } from 'express-validator'
-import loginService from '../services/loginService'
+import loginService from '../services/loginService.js'
 import dotenv from 'dotenv'
-import { UserDocument } from '../modelsMongoose/user'
+import { UserDocument } from '../modelsMongoose/user.js'
 import process from 'node:process'
-import { LoginParser } from '../utils/parsers'
+import { LoginParser } from '../utils/parsers.js'
 dotenv.config()
 
 loginRouter.post(

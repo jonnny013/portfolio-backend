@@ -1,12 +1,12 @@
 import express from 'express'
 import type { Request, Response } from 'express'
-import aboutMeService from '../services/aboutMeService'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
+import aboutMeService from '../services/aboutMeService.js'
+import middleware from '../utils/middleware.js'
+import logger from '../utils/logger.js'
 import { MongoServerError } from 'mongodb'
-import { upload } from '../config/multer_file_config'
-import {  saveToS3 } from '../config/s3_bucket'
-import { AboutMeParser } from '../utils/parsers'
+import { upload } from '../config/multer_file_config.js'
+import { saveToS3 } from '../config/s3_bucket.js'
+import { AboutMeParser } from '../utils/parsers.js'
 
 const aboutMeRouter = express.Router()
 
@@ -34,7 +34,7 @@ aboutMeRouter.post(
       }
       response.status(400).send(error)
     }
-  }
+  },
 )
 
 aboutMeRouter.get('/', async (_request: Request, response: Response) => {
@@ -67,7 +67,7 @@ aboutMeRouter.delete(
       logger.error(error)
       response.status(400).json({ error: 'Delete unsuccessful' })
     }
-  }
+  },
 )
 
 aboutMeRouter.put(
@@ -88,7 +88,11 @@ aboutMeRouter.put(
       }
 
       const updatedPost = AboutMeParser.parse(object)
-      const changedPost = await aboutMeService.editAboutMePost(updatedPost, id, request.file)
+      const changedPost = await aboutMeService.editAboutMePost(
+        updatedPost,
+        id,
+        request.file,
+      )
 
       response.status(201).json(changedPost)
     } catch (error: unknown) {
@@ -103,7 +107,7 @@ aboutMeRouter.put(
       }
       response.status(400).send(errorMessage)
     }
-  }
+  },
 )
 
 export default aboutMeRouter

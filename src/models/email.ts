@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   literal,
 } from 'sequelize'
-import { sequelize } from '../db/db'
+import { sequelize } from '../db/db.js'
 
 class Email extends Model<
   InferAttributes<Email>,

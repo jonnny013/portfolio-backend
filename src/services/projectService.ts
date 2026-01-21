@@ -1,5 +1,5 @@
-import Project from "../modelsMongoose/project"
-import { NewProject, ProjectType } from "../types"
+import Project from '../modelsMongoose/project.js'
+import { NewProject, ProjectType } from '../types.js'
 
 const getProject = async () => {
   const project = await Project.find({})
@@ -30,8 +30,7 @@ const addProject = async (object: NewProject) => {
     console.log(error)
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
       throw new Error('Title is already taken')
-    }
-     else {
+    } else {
       throw new Error('Database error')
     }
   }

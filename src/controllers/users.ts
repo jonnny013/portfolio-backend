@@ -1,6 +1,6 @@
 import express from 'express'
 import type { Request, Response } from 'express'
-import userService from '../services/userService'
+import userService from '../services/userService.js'
 //import utilCheck from '../utils/parsingUtils'
 const userRouter = express.Router()
 
@@ -43,6 +43,7 @@ userRouter.post('/:id/reset_pass', async (request: Request, response: Response) 
   } catch (err) {
     response
       .status(400)
+      // @ts-ignore
       .json({ message: 'unable to update password', error: err.message })
   }
 })

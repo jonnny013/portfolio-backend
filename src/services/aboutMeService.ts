@@ -1,6 +1,6 @@
-import { deleteFromS3, getImageFromS3, saveToS3 } from '../config/s3_bucket'
-import AboutMePost from '../modelsMongoose/aboutMePost'
-import { NewAboutMeType, AboutMeType } from '../types'
+import { deleteFromS3, getImageFromS3, saveToS3 } from '../config/s3_bucket.js'
+import AboutMePost from '../modelsMongoose/aboutMePost.js'
+import { NewAboutMeType, AboutMeType } from '../types.js'
 import type { Express } from 'express'
 
 const getAboutMePost = async () => {
@@ -13,6 +13,9 @@ const getAboutMePost = async () => {
 
 const getSingleAboutMePost = async (id: string) => {
   const aboutMePost = await AboutMePost.findById(id)
+
+  if (!aboutMePost) return
+
   aboutMePost.picture = getImageFromS3(aboutMePost.picture)
   return aboutMePost
 }
@@ -44,7 +47,7 @@ const addAboutMePost = async (object: NewAboutMeType) => {
 const editAboutMePost = async (
   object: AboutMeType,
   id: string,
-  file: Express.Multer.File
+  file?: Express.Multer.File,
 ) => {
   const originalPost = await AboutMePost.findById(id)
   if (file && originalPost) {

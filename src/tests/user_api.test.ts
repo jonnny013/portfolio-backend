@@ -8,9 +8,9 @@ import { test, after, beforeEach } from 'node:test'
 import assert from 'node:assert'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
-import app from '../app'
-import User from '../models/user'
-import helper from './test_helper'
+import app from '../app.js'
+import User from '../models/user.js'
+import helper from './test_helper.js'
 const api = supertest(app)
 
 beforeEach(async () => {
@@ -32,7 +32,7 @@ test('duplicate user cannot be made', async () => {
   assert.strictEqual(
     response.text,
     'Username is already taken',
-    'Expected message "Username is already taken" in response'
+    'Expected message "Username is already taken" in response',
   )
 })
 

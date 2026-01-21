@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import type { Express } from 'express'
-import logger from '../utils/logger'
+import logger from '../utils/logger.js'
 import crypto from 'node:crypto'
 import path from 'node:path'
 import process from 'node:process'

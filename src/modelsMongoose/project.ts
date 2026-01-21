@@ -13,7 +13,7 @@ const SkillsSchema = new mongoose.Schema(
     javascript: Boolean,
     typescript: Boolean,
   },
-  { _id: false, versionKey: false }
+  { _id: false, versionKey: false },
 )
 
 const projectSchema = new mongoose.Schema({

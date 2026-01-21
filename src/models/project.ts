@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   literal,
 } from 'sequelize'
-import { sequelize } from '../db/db'
+import { sequelize } from '../db/db.js'
 
 class Project extends Model<
   InferAttributes<Project>,

@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize'
-import logger from '../utils/logger'
+import logger from '../utils/logger.js'
 import process from 'node:process'
 
 const databaseUrl = process.env.DATABASE_URL

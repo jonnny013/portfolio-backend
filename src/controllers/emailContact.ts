@@ -1,15 +1,16 @@
-// deno-types="npm:@types/express"
 import express from 'express'
 import type { Request, Response } from 'express'
-import emailService from "../services/emailService"
-import { ContactFormParser } from "../utils/parsers";
+import emailService from '../services/emailService.js'
+import { ContactFormParser } from '../utils/parsers.js'
+
 const emailRouter = express.Router()
 
-emailRouter.post('/', (async (request: Request, response: Response) => {
+emailRouter.post('/', async (request: Request, response: Response) => {
   try {
     const newEmail = ContactFormParser.parse(request.body)
-    const addedPost =  await emailService.addEmail({email: newEmail, request})
-    return response.status(200).json(addedPost)
+    const addedPost = await emailService.addEmail({ email: newEmail, request })
+    response.status(200).json(addedPost)
+    return
   } catch (error: unknown) {
     let errorMessage = 'Something went wrong.'
     if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
@@ -20,8 +21,9 @@ emailRouter.post('/', (async (request: Request, response: Response) => {
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message + error
     }
-    return response.status(400).send(errorMessage)
+    response.status(400).send(errorMessage)
+    return
   }
-}))
+})
 
 export default emailRouter

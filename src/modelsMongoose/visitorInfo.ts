@@ -6,7 +6,7 @@ const visitRecordSchema = new mongoose.Schema(
     device: String,
     visitedPaths: String,
   },
-  { _id: false, versionKey: false }
+  { _id: false, versionKey: false },
 )
 
 const visitorRecordSchema = new mongoose.Schema({

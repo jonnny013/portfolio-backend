@@ -1,9 +1,9 @@
 import express from 'express'
 import type { Request, Response } from 'express'
-import projectService from '../services/projectService'
-import middleware from '../utils/middleware'
-import logger from '../utils/logger'
-import { OldProjectParser, ProjectParser } from '../utils/parsers'
+import projectService from '../services/projectService.js'
+import middleware from '../utils/middleware.js'
+import logger from '../utils/logger.js'
+import { OldProjectParser, ProjectParser } from '../utils/parsers.js'
 const projectRouter = express.Router()
 
 projectRouter.post(
@@ -13,7 +13,7 @@ projectRouter.post(
     const newPost = ProjectParser.parse(request.body)
     const addedPost = await projectService.addProject(newPost)
     response.status(201).json(addedPost)
-  }
+  },
 )
 
 projectRouter.get('/', async (_request: Request, response: Response) => {
@@ -45,7 +45,7 @@ projectRouter.delete(
       logger.error(error)
       response.status(400).json({ error: 'Delete unsuccessful' })
     }
-  }
+  },
 )
 
 projectRouter.put(
@@ -57,7 +57,8 @@ projectRouter.put(
     try {
       const newPost = OldProjectParser.parse(post)
       const addedPost = await projectService.editProject(newPost, id)
-      return response.status(201).json(addedPost)
+      response.status(201).json(addedPost)
+      return
     } catch (error: unknown) {
       logger.error(error)
       let errorMessage = 'Something went wrong.'
@@ -69,9 +70,10 @@ projectRouter.put(
       if (error instanceof Error) {
         errorMessage += ' Error: ' + error.message
       }
-      return response.status(400).send(errorMessage)
+      response.status(400).send(errorMessage)
+      return
     }
-  }
+  },
 )
 
 export default projectRouter
